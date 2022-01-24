@@ -16,6 +16,7 @@ const (
 	dbname   = "memories"
 )
 
+// go get golang.org/x/crypto/bcrypt
 func main() {
 	app := fiber.New()
 

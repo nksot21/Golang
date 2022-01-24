@@ -28,7 +28,7 @@ func CreateOrder(c *fiber.Ctx) error {
 	}
 
 	var user models.User
-	if err := findUser(order.UserRefer, &user); err != nil {
+	if err := findUserID(order.UserRefer, &user); err != nil {
 		return c.Status(400).JSON("error find user")
 	}
 	var product models.Product

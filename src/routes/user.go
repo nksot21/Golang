@@ -7,8 +7,10 @@ import (
 )
 
 func SetUpUserRoutes(app *fiber.App) {
-	// POST: /newuser
-	app.Post("/newuser", handler.CreateUser)
+	// POST: /register
+	app.Post("/register", handler.Register)
+	// POST: /signin
+	app.Post("/signin", handler.SignIn)
 	// GET: /user
 	app.Get("/user", handler.GetUsers)
 	// GET: /user/:id

@@ -6,15 +6,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func SetUpProductRoutes(app *fiber.App) {
-	// POST: /newproduct
-	app.Post("/newproduct", handler.CreateProduct)
+func SetUpProductRoutes(product fiber.Router) {
+	// POST: order/new
+	product.Post("/", handler.CreateProduct)
 	// GET: /product
-	app.Get("/product", handler.GetProducts)
+	product.Get("/", handler.GetProducts)
 	// GET: /product/:id
-	app.Get("/product/:id", handler.GetProduct)
+	product.Get("/:id", handler.GetProduct)
 	// PUT: /product/:id
-	app.Put("/product/:id", handler.UpdateProduct)
+	product.Put("/:id", handler.UpdateProduct)
 	// DELETE: /product/:id
-	app.Delete("/product/:id", handler.DeleteProduct)
+	product.Delete("/:id", handler.DeleteProduct)
 }

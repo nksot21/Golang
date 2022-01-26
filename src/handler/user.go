@@ -78,8 +78,8 @@ func createJWTToken(user *models.User) (string, int64, error) {
 	return t, exp, nil
 }
 
-// CREATE USER: POST: /newuser
-func Register(c *fiber.Ctx) error {
+// CREATE USER: POST: user/new
+func SignUp(c *fiber.Ctx) error {
 	var user models.User
 
 	if err := c.BodyParser(&user); err != nil {

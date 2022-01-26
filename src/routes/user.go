@@ -6,17 +6,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func SetUpUserRoutes(app *fiber.App) {
-	// POST: /register
-	app.Post("/register", handler.Register)
-	// POST: /signin
-	app.Post("/signin", handler.SignIn)
+func SetUpUserRoutes(user fiber.Router) {
 	// GET: /user
-	app.Get("/user", handler.GetUsers)
+	user.Get("/", handler.GetUsers)
 	// GET: /user/:id
-	app.Get("/user/:id", handler.GetUser)
+	user.Get("/:id", handler.GetUser)
 	// PUT: /user/:id
-	app.Put("/user/:id", handler.UpdateUser)
+	user.Put("/:id", handler.UpdateUser)
 	// DELETE: /user/:id
-	app.Delete("/user/:id", handler.DeleteUser)
+	user.Delete("/:id", handler.DeleteUser)
 }

@@ -6,11 +6,11 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func SetUpOrderRoutes(app *fiber.App) {
-	// POST: /neworder
-	app.Post("/neworder", handler.CreateOrder)
+func SetUpOrderRoutes(order fiber.Router) {
+	// POST: order/new
+	order.Post("/", handler.CreateOrder)
 	// GET: /order
-	app.Get("/order", handler.GetOrders)
+	order.Get("/", handler.GetOrders)
 	// GET: /order/:id
-	app.Get("/order/:id", handler.GetOrder)
+	order.Get("/:id", handler.GetOrder)
 }

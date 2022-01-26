@@ -2,6 +2,7 @@ package main
 
 import (
 	"connectdb/src/driver"
+	"connectdb/src/handler"
 	"connectdb/src/routes"
 	"log"
 
@@ -11,11 +12,12 @@ import (
 
 // go get golang.org/x/crypto/bcrypt
 // jwtware "github.com/gofiber/jwt/v3"
-const (
+
+var (
 	host     = "localhost"
 	user     = "postgres"
 	port     = "5432"
-	password = "Nhakhuyen21."
+	password = handler.GetEnvVar("password")
 	dbname   = "memories"
 )
 
@@ -30,14 +32,14 @@ func SetUpRoutes(app *fiber.App) {
 	// PRODUCT ROUTES
 	product := app.Group("/product")
 	product.Use(jwtware.New(jwtware.Config{
-		SigningKey: []byte("secret"),
+		SigningKey: []byte(handler.GetEnvVar("PRIVATE_KEY")),
 	}))
 	routes.SetUpProductRoutes(product)
 
 	// ORDER ROUTES
 	order := app.Group("/order")
 	order.Use(jwtware.New(jwtware.Config{
-		SigningKey: []byte("secret"),
+		SigningKey: []byte(handler.GetEnvVar("PRIVATE_KEY")),
 	}))
 	routes.SetUpOrderRoutes(order)
 

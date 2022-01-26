@@ -71,7 +71,7 @@ func createJWTToken(user *models.User) (string, int64, error) {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["user_id"] = user.ID
 	claims["exp"] = exp
-	t, err := token.SignedString([]byte("secret"))
+	t, err := token.SignedString([]byte(GetEnvVar("PRIVATE_KEY")))
 	if err != nil {
 		return "", 0, err
 	}

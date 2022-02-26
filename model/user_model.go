@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"mental-health-api/pkg/database"
+	"time"
 )
 
 type User struct {
@@ -14,10 +15,15 @@ type User struct {
 	Name           string `json:"name"`
 	Email          string `json:"email"`
 	Bio            string `json:"bio"`
+	IsExpert       bool   `json:"is_expert"`
 }
 
 func (u *User) Create() (*mongo.InsertOneResult, error) {
-	fmt.Println(u)
+	u.BaseModel = BaseModel{
+		CreatedAt: time.Now().Unix(),
+		UpdatedAt: time.Now().Unix(),
+	}
+
 	instance := database.GetMongoInstance()
 	result, err := instance.Db.Collection("users").InsertOne(context.Background(), u)
 	fmt.Println(result)

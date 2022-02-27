@@ -3,13 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/gofiber/fiber/v2"
-	_ "github.com/joho/godotenv/autoload" // load .env file automatically
 	configs "mental-health-api/pkg/config"
 	"mental-health-api/pkg/database"
 	"mental-health-api/pkg/routes"
 	"mental-health-api/pkg/utils"
 	"os"
+
+	"github.com/gofiber/fiber/v2"
+	_ "github.com/joho/godotenv/autoload" // load .env file automatically
 )
 
 func main() {
@@ -20,6 +21,7 @@ func main() {
 	app := fiber.New(config)
 
 	routes.UserRouter(app)
+	routes.PostRouter(app)
 
 	fmt.Println("Connected to MongoDB!")
 

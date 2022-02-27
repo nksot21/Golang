@@ -11,7 +11,7 @@ import (
 )
 
 type Post struct {
-	BaseModel
+	BaseModel `bson: "basemodel"`
 
 	ID             primitive.ObjectID `json: "id,omitempty" bson:"id"`
 	Title          string             `json: "title,omitempty" bson: "title"`
@@ -112,10 +112,22 @@ func (p *Post) DeleteOne(post_id string) error {
 	return nil*/
 	collection := database.GetMongoInstance().Db.Collection("Posts")
 	objId, _ := primitive.ObjectIDFromHex(post_id)
+	post, err := p.GetOne(post_id)
+
+	if err != nil {
+		return err
+	}
+
+	newBaseModule := BaseModel{
+		CreatedAt: post.CreatedAt,
+		UpdatedAt: post.UpdatedAt,
+		Deleted:   true,
+		DeletedAt: time.Now().Unix(),
+	}
+
 	update := bson.M{
 		"$set": bson.M{
-			"deleted_at": time.Now().Unix(),
-			"deleted":    true,
+			"basemodel": newBaseModule,
 		},
 	}
 
@@ -138,12 +150,26 @@ func (p *Post) DeleteAll() error {
 func (p *Post) UpdateOne(post_id string) error {
 	objId, _ := primitive.ObjectIDFromHex(post_id)
 
+	post, err := p.GetOne(post_id)
+
+	if err != nil {
+		return err
+	}
+
+	newBaseModule := BaseModel{
+		CreatedAt: post.CreatedAt,
+		UpdatedAt: time.Now().Unix(),
+		Deleted:   post.Deleted,
+		DeletedAt: post.DeletedAt,
+	}
+
 	updatePost := bson.M{
 		"title":            p.Title,
 		"emotion":          p.Emotion,
 		"detail":           p.Detail,
 		"picture":          p.Picture,
 		"firebase_user_id": p.FireBaseUserId,
+		"basemodel":        newBaseModule,
 	}
 
 	instance := database.GetMongoInstance()

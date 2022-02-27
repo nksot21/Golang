@@ -2,7 +2,6 @@ package handler
 
 import (
 	models "mental-health-api/model"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -59,12 +58,7 @@ func DeletePost(ctx *fiber.Ctx) error {
 	var post models.Post
 	post_id := ctx.Params("postid")
 
-	post.BaseModel.Deleted = true
-	post.BaseModel.DeletedAt = time.Now().Unix()
-
-	err := post.DeleteOne(post_id)
-
-	if err != nil {
+	if err := post.DeleteOne(post_id); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 

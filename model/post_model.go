@@ -13,12 +13,12 @@ import (
 type Post struct {
 	BaseModel
 
-	ID             primitive.ObjectID `json: "id,omitempty"`
-	Title          string             `json: "title,omitempty"`
-	Emotion        int                `json: "emotion,omitempty"`
-	Detail         string             `json: "detail,omitempty"`
-	Picture        string             `json: "picture,omitempty"`
-	FireBaseUserId string             `json: "firebase_user_id,omitempty"`
+	ID             primitive.ObjectID `json: "id,omitempty" bson:"id"`
+	Title          string             `json: "title,omitempty" bson: "title"`
+	Emotion        int                `json: "emotion,omitempty" bson: "emotion"`
+	Detail         string             `json: "detail,omitempty" bson: "detail"`
+	Picture        string             `json: "picture,omitempty" bson: "picture"`
+	FireBaseUserId string             `json: "firebase_user_id,omitempty" bson: "firebase_user_id"`
 }
 
 type JsonData struct {
@@ -111,9 +111,7 @@ func (p *Post) DeleteOne(post_id string) error {
 
 	return nil*/
 	collection := database.GetMongoInstance().Db.Collection("Posts")
-	filter := map[string]string{
-		"_id": post_id,
-	}
+	objId, _ := primitive.ObjectIDFromHex(post_id)
 	update := bson.M{
 		"$set": bson.M{
 			"deleted_at": time.Now().Unix(),
@@ -121,7 +119,8 @@ func (p *Post) DeleteOne(post_id string) error {
 		},
 	}
 
-	_, err := collection.UpdateOne(context.Background(), filter, update)
+	result, err := collection.UpdateOne(context.Background(), bson.M{"id": objId}, update)
+	fmt.Println(result)
 	return err
 }
 

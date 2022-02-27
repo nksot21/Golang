@@ -12,5 +12,5 @@ func PostRouter(a *fiber.App) {
 	router.Get("/:postid?", handler.GetPost)
 	router.Post("/create", handler.CreatePost)
 	router.Put("/update/:postid?", handler.UpdatePost)
-	router.Delete("/delete/:postid?", handler.DeletePost)
+	router.Put("/delete/:postid?", handler.DeletePost)
 }

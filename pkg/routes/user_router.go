@@ -2,10 +2,12 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"mental-health-api/hanlder"
+	"mental-health-api/handler"
 )
 
 func UserRouter(a *fiber.App) {
 	router := a.Group("/user")
-	router.Post("/", hanlder.CreateUser)
+	router.Get("/", handler.GetUser)
+	router.Post("/", handler.CreateUser)
+	router.Put("/", handler.UpdateUser)
 }

@@ -1,8 +1,9 @@
-package hanlder
+package handler
 
 import (
-	"github.com/gofiber/fiber/v2"
 	models "mental-health-api/model"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 func CreateUser(ctx *fiber.Ctx) error {

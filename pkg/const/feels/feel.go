@@ -1,4 +1,4 @@
-package _feel
+package feels
 
 const (
 	HAPPY = iota + 1

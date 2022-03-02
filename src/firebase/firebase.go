@@ -43,33 +43,4 @@ func ConnectFirestore() {
 		fmt.Println(err)
 	}
 	FirebaseApp.Db = client
-	/*
-		// GET A DOCUMENT BY ID
-		var chat Chats
-		states := client.Collection("chats")
-		ny := states.Doc("RmIuqGsJFq9VvrUVqCAj")
-
-		docsnap, err := ny.Get(Ctx)
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		if err := docsnap.DataTo(&chat); err != nil {
-			fmt.Println("this err")
-		}
-
-		//dataMap := docsnap.Data()
-		fmt.Println(chat)
-
-		// CREATE NEW DOCUMENT
-		nys := states.NewDoc()
-
-		wr, err := nys.Create(Ctx, Chats{
-			Aaaa:   "Albany",
-			Sender: "Alb",
-		})
-		if err != nil {
-			fmt.Println("write error")
-		}
-		fmt.Println(wr)*/
 }

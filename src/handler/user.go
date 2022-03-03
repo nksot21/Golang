@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"bytes"
 	"chatdemo/src/firebase"
 	"chatdemo/src/models"
 	"errors"
@@ -67,6 +66,10 @@ func findUserEmail(email string) (models.User, error) {
 	return user, nil
 }
 
+func CheckUserIDURL() {
+
+}
+
 // CREATE JWT TOKEN
 func createJWTToken(user *models.User) (string, int64, error) {
 	exp := time.Now().Add(time.Minute * 30).Unix()
@@ -78,8 +81,8 @@ func createJWTToken(user *models.User) (string, int64, error) {
 	if err != nil {
 		return "", 0, err
 	}
-	str, err := jwt.DecodeSegment(t)
-	fmt.Println("token key: ", bytes.Runes(str), " err ", err)
+	//str, err := jwt.DecodeSegment(t)
+	//fmt.Println("token key: ", bytes.Runes(str), " err ", err)
 	return t, exp, nil
 }
 

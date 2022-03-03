@@ -20,7 +20,7 @@ func NewMessage(receiverID, senderID string, content []byte) (string, error) {
 	fmt.Println(receiverID)
 	fmt.Println(senderID)
 	chatCol := firebase.FirebaseApp.Db.Collection("chats")
-	chatid, err := isChatExist(senderID, receiverID)
+	chatid, err := getChatID(senderID, receiverID)
 	if err != nil {
 		fmt.Println("add message error: ", err.Error())
 		return "", err

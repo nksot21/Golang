@@ -2,6 +2,7 @@ package routes
 
 import (
 	"chatdemo/src/chat"
+	"chatdemo/src/handler"
 
 	"github.com/gofiber/websocket/v2"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func chatPage(c *fiber.Ctx) error {
+	handler.CheckUserIDURL()
 	return c.SendFile("home.html")
 }
 

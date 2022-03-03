@@ -9,5 +9,5 @@ type Message struct {
 	ID        string `firestore:"id"`
 	CreatedAt time.Time
 	Sender    string `firestore:"sender"`
-	Content   []byte `firestore:"content"`
+	Content   string `firestore:"content"`
 }

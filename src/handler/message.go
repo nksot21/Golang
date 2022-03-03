@@ -15,7 +15,8 @@ import (
 }*/
 
 func NewMessage(receiverID, senderID string, content []byte) (string, error) {
-	newMessg := models.Message{CreatedAt: time.Now(), Sender: senderID, Content: content}
+	contentStr := string(content)
+	newMessg := models.Message{CreatedAt: time.Now(), Sender: senderID, Content: contentStr}
 	fmt.Println(newMessg)
 	fmt.Println(receiverID)
 	fmt.Println(senderID)

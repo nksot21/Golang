@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"time"
 
+	"cloud.google.com/go/firestore"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -64,10 +65,6 @@ func findUserEmail(email string) (models.User, error) {
 	user.ID = userDB.Ref.ID
 	fmt.Println(user)
 	return user, nil
-}
-
-func CheckUserIDURL() {
-
 }
 
 // CREATE JWT TOKEN
@@ -150,4 +147,15 @@ func SignIn(c *fiber.Ctx) error {
 
 	responseUser := CreateResponseUserToken(userdb, token, exp)
 	return c.Status(200).JSON(responseUser)
+}
+
+func GetUserByID(userID string) (*firestore.DocumentRef, error) {
+	userCol := firebase.FirebaseApp.Db.Collection("users")
+	user := userCol.Doc(userID)
+	userSnap, err := user.Get(firebase.Ctx)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(userSnap.Data())
+	return user, nil
 }

@@ -6,20 +6,17 @@ import (
 	"chatdemo/src/models"
 	"fmt"
 	"time"
+
+	"github.com/gofiber/fiber/v2"
 )
 
-/*type Message struct {
-	senderID  string `firestore:"senderid"`
-	createdAt time.Time
-	content   []byte `firestore:"content"`
-}*/
+type Messages struct {
+	Message []models.Message
+}
 
 func NewMessage(receiverID, senderID string, content []byte) (string, error) {
 	contentStr := string(content)
 	newMessg := models.Message{CreatedAt: time.Now(), Sender: senderID, Content: contentStr}
-	fmt.Println(newMessg)
-	fmt.Println(receiverID)
-	fmt.Println(senderID)
 	chatCol := firebase.FirebaseApp.Db.Collection("chats")
 	chatid, err := getChatID(senderID, receiverID)
 	if err != nil {
@@ -35,4 +32,32 @@ func NewMessage(receiverID, senderID string, content []byte) (string, error) {
 		return "", err
 	}
 	return newMessage.ID, nil
+}
+
+func GetAllMessage(c *fiber.Ctx) error {
+	var messagesResponse Messages
+	senderID := c.Params("userid")
+	receiverID := c.Params("id")
+	chatID, err := getChatID(senderID, receiverID)
+	if err != nil {
+		fmt.Println("cannot get chat id")
+		return err
+	}
+	chatCol := firebase.FirebaseApp.Db.Collection("chats")
+	chat := chatCol.Doc(chatID)
+	fmt.Println("chatid: ", chat.ID)
+	messagesRef := chat.Collection("messages").DocumentRefs(firebase.Ctx)
+	messages, err := messagesRef.GetAll()
+	for messgIndex := range messages {
+		messageSnap, err := messages[messgIndex].Get(firebase.Ctx)
+		if err != nil {
+			return err
+		}
+		var message models.Message
+		if err = messageSnap.DataTo(&message); err != nil {
+			return err
+		}
+		messagesResponse.Message = append(messagesResponse.Message, message)
+	}
+	return c.Status(200).JSON(messagesResponse)
 }

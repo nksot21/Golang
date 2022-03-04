@@ -46,11 +46,21 @@ func getChatID(userstID string, userndID string) (string, error) {
 	return chatID, nil
 }
 
+//*firestore.DocumentRef converts to Reference
+
 func NewChat(userstID string, userndID string, chatID string, chatCol *firestore.CollectionRef) (string, error) {
-	userSlice := append(make([]string, 0), userstID, userndID)
+	userst, err := GetUserByID(userstID)
+	if err != nil {
+		return "", err
+	}
+	usernd, err := GetUserByID(userstID)
+	if err != nil {
+		return "", err
+	}
+	usersRef := append(make([]firestore.DocumentRef, 0), *userst, *usernd)
 	chat := models.Chat{
 		ID:    chatID,
-		Users: userSlice,
+		Users: &usersRef,
 	}
 	fmt.Println("chatID:", chatID)
 

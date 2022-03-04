@@ -10,7 +10,6 @@ import (
 )
 
 func chatPage(c *fiber.Ctx) error {
-	handler.CheckUserIDURL()
 	return c.SendFile("home.html")
 }
 
@@ -26,6 +25,6 @@ func SetUpChatRoutes(app *fiber.App) {
 	})
 	app.Get("/chat/:userid/:id", chatPage)
 	runServeWs := chat.ServeWs()
+	app.Get("/:userid/:id", handler.GetAllMessage)
 	app.Get("/ws/chat/:userid/:id", runServeWs)
-
 }

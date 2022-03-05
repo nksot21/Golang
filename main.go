@@ -9,16 +9,11 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func runChat() {
-	hub := chat.NewHub()
-
-	go hub.Run()
-}
-
 func main() {
 
 	app := fiber.New()
 
+	//CONNECT DATABASE
 	firebase.ConnectFirebase()
 	firebase.ConnectFirestore()
 

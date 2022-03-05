@@ -4,7 +4,7 @@ import (
 	"chatdemo/src/firebase"
 	"chatdemo/src/models"
 	"errors"
-	"fmt"
+
 	"time"
 
 	"cloud.google.com/go/firestore"
@@ -40,10 +40,8 @@ func CheckUserEmail(email string) error {
 	userCol := firebase.FirebaseApp.Db.Collection("users")
 	query := userCol.Where("email", "==", email)
 
-	fmt.Println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 	_, err := query.Documents(firebase.Ctx).Next()
 	if err == nil {
-		fmt.Println("err")
 		return errors.New("User existed")
 	}
 	return nil
@@ -54,7 +52,6 @@ func findUserEmail(email string) (models.User, error) {
 	userCol := firebase.FirebaseApp.Db.Collection("users")
 	query := userCol.Where("email", "==", email)
 
-	fmt.Println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 	userDB, err := query.Documents(firebase.Ctx).Next()
 	if err != nil {
 		return user, errors.New("User not exist")
@@ -63,7 +60,6 @@ func findUserEmail(email string) (models.User, error) {
 		return user, err
 	}
 	user.ID = userDB.Ref.ID
-	fmt.Println(user)
 	return user, nil
 }
 
@@ -78,8 +74,6 @@ func createJWTToken(user *models.User) (string, int64, error) {
 	if err != nil {
 		return "", 0, err
 	}
-	//str, err := jwt.DecodeSegment(t)
-	//fmt.Println("token key: ", bytes.Runes(str), " err ", err)
 	return t, exp, nil
 }
 
@@ -109,18 +103,16 @@ func SignUp(c *fiber.Ctx) error {
 	user.Password = string(hash)
 
 	newUser := userCol.NewDoc()
-	wr, err := newUser.Create(firebase.Ctx, user)
+	user.ID = newUser.ID
+	_, err = newUser.Create(firebase.Ctx, user)
 	if err != nil {
-		fmt.Println(err)
-		return c.Status(400).JSON("create err")
+		return c.Status(400).JSON(err)
 	}
 	token, exp, err := createJWTToken(&user)
 	if err != nil {
 		return c.Status(400).JSON(err)
 	}
 	responseUser := CreateResponseUserToken(user, token, exp)
-
-	fmt.Println(wr)
 
 	return c.Status(200).JSON(responseUser)
 }
@@ -152,10 +144,9 @@ func SignIn(c *fiber.Ctx) error {
 func GetUserByID(userID string) (*firestore.DocumentRef, error) {
 	userCol := firebase.FirebaseApp.Db.Collection("users")
 	user := userCol.Doc(userID)
-	userSnap, err := user.Get(firebase.Ctx)
+	_, err := user.Get(firebase.Ctx)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(userSnap.Data())
 	return user, nil
 }

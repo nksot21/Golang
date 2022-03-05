@@ -1,13 +1,9 @@
 package handler
 
-// id cuộc trò chuyện => thêm message
 import (
 	"chatdemo/src/firebase"
 	"chatdemo/src/models"
-	"fmt"
 	"time"
-
-	"github.com/gofiber/fiber/v2"
 )
 
 type Messages struct {
@@ -20,7 +16,6 @@ func NewMessage(receiverID, senderID string, content []byte) (string, error) {
 	chatCol := firebase.FirebaseApp.Db.Collection("chats")
 	chatid, err := getChatID(senderID, receiverID)
 	if err != nil {
-		fmt.Println("add message error: ", err.Error())
 		return "", err
 	}
 	chat := chatCol.Doc(chatid)
@@ -28,26 +23,24 @@ func NewMessage(receiverID, senderID string, content []byte) (string, error) {
 	newMessage := messgCol.NewDoc()
 	_, err = newMessage.Create(firebase.Ctx, newMessg)
 	if err != nil {
-		fmt.Println("add message error 2: ", err)
 		return "", err
 	}
 	return newMessage.ID, nil
 }
 
-func GetAllMessage(c *fiber.Ctx) error {
+func GetAllMessages(senderID, receiverID string) error {
 	var messagesResponse Messages
-	senderID := c.Params("userid")
-	receiverID := c.Params("id")
 	chatID, err := getChatID(senderID, receiverID)
 	if err != nil {
-		fmt.Println("cannot get chat id")
 		return err
 	}
 	chatCol := firebase.FirebaseApp.Db.Collection("chats")
 	chat := chatCol.Doc(chatID)
-	fmt.Println("chatid: ", chat.ID)
 	messagesRef := chat.Collection("messages").DocumentRefs(firebase.Ctx)
 	messages, err := messagesRef.GetAll()
+	if err != nil {
+		return err
+	}
 	for messgIndex := range messages {
 		messageSnap, err := messages[messgIndex].Get(firebase.Ctx)
 		if err != nil {
@@ -59,5 +52,5 @@ func GetAllMessage(c *fiber.Ctx) error {
 		}
 		messagesResponse.Message = append(messagesResponse.Message, message)
 	}
-	return c.Status(200).JSON(messagesResponse)
+	return nil
 }

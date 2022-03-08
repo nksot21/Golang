@@ -11,14 +11,14 @@ import (
 )
 
 type Post struct {
-	BaseModel `bson: "basemodel"`
+	BaseModel `bson:"basemodel"`
 
-	ID             primitive.ObjectID `json: "id,omitempty" bson:"id"`
-	Title          string             `json: "title,omitempty" bson: "title"`
-	Emotion        int                `json: "emotion,omitempty" bson: "emotion"`
-	Detail         string             `json: "detail,omitempty" bson: "detail"`
-	Picture        string             `json: "picture,omitempty" bson: "picture"`
-	FireBaseUserId string             `json: "firebase_user_id,omitempty" bson: "firebase_user_id"`
+	ID             primitive.ObjectID `json:"id,omitempty" bson:"id"`
+	Title          string             `json:"title,omitempty" bson:"title"`
+	Emotion        int                `json:"emotion,omitempty" bson:"emotion"`
+	Detail         string             `json:"detail,omitempty" bson:"detail"`
+	Picture        string             `json:"picture,omitempty" bson:"picture"`
+	FireBaseUserId string             `json:"firebase_user_id,omitempty" bson:"firebase_user_id"`
 }
 
 type JsonData struct {

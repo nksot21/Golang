@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"mental-health-api/pkg/chat"
 	configs "mental-health-api/pkg/config"
 	"mental-health-api/pkg/database"
+	"mental-health-api/pkg/firebase"
 	"mental-health-api/pkg/routes"
 	"mental-health-api/pkg/utils"
 	"os"
@@ -22,6 +24,11 @@ func main() {
 
 	routes.UserRouter(app)
 	routes.PostRouter(app)
+	routes.ChatRoutes(app)
+
+	go chat.HubConn.Run()
+	firebase.ConnectFirebase()
+	firebase.ConnectFirestore()
 
 	fmt.Println("Connected to MongoDB!")
 

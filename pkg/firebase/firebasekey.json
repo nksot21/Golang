@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "mental-heath-gdsc-uit",
+  "private_key_id": "fa02896a6d6df2350a1e376eeba430f8b60fc886",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCfj+OgEqjyLT6k\nK3F/ZZ5n9znFK8bEqCpIk74x/fT4VXACRayBLjtE8oAo77OO6/Pd1AN5jS+ol2Su\nNCDXW1wK0alQFEkVDztFg/1nkOu14iY4AWs6SuRLIkZi6chANIKunjaAF7C2FF3o\nbun4DZewp9CboS3YRvIkgYgESsnS0m+esDpHROItmxywR1bhhwVaq6SK05NJPDFl\nvTi/HjZ3rArXWLDmClZEqnWme7QZ3DCWx54eQzoG6hP5oIrWZMlKCWds5ms5UuOl\n5YYw19oOWI3VeUsjJo6NzGe8l8PtrDkUVo+mVCqH1m/10yjFv7qdbFIG+nlYlxmY\nUQc9egBDAgMBAAECggEAF+/GhoN2G8qEzK0FvEZa0p7oaDdOfL77hOLBFA/UeZKb\nmIOqQsDUPF4issFuzuB/t4XwNYJkJWb8wBNq39PBRZA5VZ2Nbx7XVfDciXZYnfL8\np8cytk542/qa04jdtSALgLWUWHf1VwNMKSvGZqNnX6V1Knut/HV8KtTRuk8b4sfZ\nOM8pNH8cGl1xMk9d0/x9Jo0bRgrGDg90JAzgEa/XXbe7uJcP5y7sW2zkngDuuqhf\nLzwp9a88ULa8grPYeqLGMLyRwUw6j7vn0Qb8xuCubMURG4a1ZybXv0veZ7qw5xuZ\npZIH/DCKs7JyiAXw8xYhZeTl6ztKirYC0wv76fIEMQKBgQDMyfUmo4BiF4moQKOe\n5xSlFHt/NqV88MC2MUMraYwoBurOg8ENig2MR3jrQpRKNHzm4JxnEwNjsDbde7jE\n/4nAAymWDyYgHTSAYX1k1tA0yDQlPceSLOJ/eLj2fIl9QJ35rHXN+veWz6XCF2Pk\nVpSViJru8vK5wQwQq+ZZA1woUQKBgQDHdqE4SQBVtXNBOWzZ9nRgoz5uwRX8Y6pv\n2hvd5y57mzwF4lRT//U/732ZQtVc3Hoz/hQqZ/SL1IFDwpluNNKoAkFioHnSu9Cz\nJ+ZBC1rYNQJJuKABRnV1AeU35bY4/B9L4wy1X5M8NcVrazNq/zZ8MX3stzkBsPf0\nO/UDMXyOUwKBgBaZ/315NBUfZej04VoLROMHRK4AmPkWFR7GhxRGfNp6EPYj4m2d\nG+usg7LrUTRzYImWpoxVs90PuK5vFjBfx5MyhidympGWx5GXsOAtOSNqKR8nF1yR\nqZnJ+Bf0HLR/KjBBEWtfVG4HktK+BB9SUunB/t96XsGThcJdRnnyffxRAoGASy8l\nH/EsZiIqGnjJ1fK29UIzI042ulbbBKRDAsbEV6Uw38rrHGqLiBj+z8lIYWNd0MFB\n2qYqoJZuTxtH+CmDCf8npER3Bv7ycMVmXjgoevyoKx+jeDeVyI/5VbOJlzs5lMI1\npRwshHKEQrQ6wmcGo5OIMrTxkPiizfXXqed6Wq8CgYBL0B74yoYBQbLo5BMuDVVa\nh2lAzSIP0JJjHGyN17kYCIseXgoC+H9ZO7xndFAt35mghWI+uSANbaK7NhVOq7ud\nVsibxfd3pnXVK/auBNQZlS3c0iWIadoVQ+IM9mSzD3OOk+esK99ImGkRBAMhE3Az\nKembSs81ctKMJ58VOATZdw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-bhaop@mental-heath-gdsc-uit.iam.gserviceaccount.com",
+  "client_id": "103415258439084127218",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-bhaop%40mental-heath-gdsc-uit.iam.gserviceaccount.com"
+}

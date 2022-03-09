@@ -1,11 +1,11 @@
 package feels
 
 const (
-	HAPPY = iota + 1
-	SAD
-	SCARED
-	ANGRY
-	WORRY
-	NORMAL
-	DEPRESSION
+	HAPPY      = 1
+	SAD        = 2
+	SCARED     = 3
+	ANGRY      = 4
+	WORRY      = 5
+	NORMAL     = 6
+	DEPRESSION = 7
 )

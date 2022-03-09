@@ -3,11 +3,12 @@ package models
 import (
 	"context"
 	"errors"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"mental-health-api/pkg/const/collections"
 	"mental-health-api/pkg/database"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type User struct {
@@ -21,10 +22,18 @@ type User struct {
 	IsExpert       bool               `json:"is_expert" bson:"is_expert"`
 }
 
-func (u *User) GetOne(firebaseUserId string) error {
+func (u *User) GetOne(firebaseUserId string, email string) error {
 	collection := database.GetMongoInstance().Db.Collection(collections.USER_COLLECTION)
-	filter := map[string]string{
+	filter := bson.M{
 		"fire_base_user_id": firebaseUserId,
+		"email":             email,
+		"deleted":           false,
+	}
+
+	if email != "" {
+		delete(filter, "fire_base_user_id")
+	} else {
+		delete(filter, "email")
 	}
 
 	err := collection.FindOne(context.TODO(), filter).Decode(&u)
@@ -41,6 +50,7 @@ func (u *User) Create() error {
 	collection := database.GetMongoInstance().Db.Collection(collections.USER_COLLECTION)
 	user := collection.FindOne(context.TODO(), bson.M{
 		"fire_base_user_id": u.FireBaseUserId,
+		"deleted":           false,
 	})
 
 	if user.Err() == nil {
@@ -54,48 +64,38 @@ func (u *User) Create() error {
 func (u *User) Update(firebaseUserId string) error {
 	u.BaseModel.UpdatedAt = time.Now().Unix()
 	collection := database.GetMongoInstance().Db.Collection(collections.USER_COLLECTION)
-	filter := bson.M{"fire_base_user_id": firebaseUserId}
+	filter := bson.M{
+		"fire_base_user_id": firebaseUserId,
+		"deleted":           false,
+	}
 
 	update := bson.M{
 		"$set": bson.M{
 			"name":       u.Name,
-			"email":      u.Email,
 			"bio":        u.Bio,
 			"is_expert":  u.IsExpert,
 			"updated_at": u.BaseModel.UpdatedAt,
 		},
 	}
 
-	_, err := collection.UpdateOne(context.Background(), filter, update)
-	return err
+	result := collection.FindOneAndUpdate(context.Background(), filter, update)
+	return result.Err()
 }
 
-func (u *User) Delete(id string) error {
+func (u *User) Delete(firebaseUserId string) error {
 	collection := database.GetMongoInstance().Db.Collection(collections.USER_COLLECTION)
 	filter := bson.M{
-		"_id": id,
+		"fire_base_user_id": firebaseUserId,
+		"deleted":           false,
 	}
+
 	update := bson.M{
 		"$set": bson.M{
 			"deleted_at": time.Now().Unix(),
 			"deleted":    true,
 		},
 	}
-	_, err := collection.UpdateOne(context.Background(), filter, update)
-	return err
-}
+	result := collection.FindOneAndUpdate(context.Background(), filter, update)
 
-func (u *User) AddUserFeel(userFeel UserFeel) error {
-	collection := database.GetMongoInstance().Db.Collection(collections.USER_COLLECTION)
-	filter := bson.M{
-		"_id": u.ID.Hex(),
-	}
-	update := bson.M{
-		"$push": map[string]interface{}{
-			"user_feels": userFeel,
-		},
-	}
-	_, err := collection.UpdateOne(context.Background(), filter, update)
-	return err
-
+	return result.Err()
 }

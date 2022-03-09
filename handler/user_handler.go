@@ -1,15 +1,23 @@
 package handler
 
 import (
+	"fmt"
 	models "mental-health-api/model"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func GetUser(ctx *fiber.Ctx) error {
-	id := ctx.Params("firebase_user_id")
+	firebaseid := ctx.Get("x-firebase-uid")
+	if firebaseid == "" {
+		return fiber.NewError(fiber.StatusUnauthorized, "header.x-firebase-uid is empty")
+	}
+
+	email := ctx.Query("email")
+	fmt.Println(firebaseid, email)
+
 	var user models.User
-	err := user.GetOne(id)
+	err := user.GetOne(firebaseid, email)
 
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
@@ -17,7 +25,7 @@ func GetUser(ctx *fiber.Ctx) error {
 
 	return ctx.JSON(models.Response{
 		Status:  fiber.StatusCreated,
-		Message: "User created successfully",
+		Message: "Get User info successfully",
 		Data:    user,
 	})
 }
@@ -39,34 +47,33 @@ func CreateUser(ctx *fiber.Ctx) error {
 }
 
 func UpdateUser(ctx *fiber.Ctx) error {
-	firebaseUserId := ctx.Params("firebase_user_id")
+	firebaseid := ctx.Get("x-firebase-uid")
+	if firebaseid == "" {
+		return fiber.NewError(fiber.StatusUnauthorized, "header.x-firebase-uid is empty")
+	}
+
 	var user models.User
 
 	if err := ctx.BodyParser(&user); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
-	if err := user.Update(firebaseUserId); err != nil {
+	if err := user.Update(firebaseid); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 	return ctx.Status(fiber.StatusOK).JSON(user)
 }
 
-func AddFeelUser(ctx *fiber.Ctx) error {
-	firebaseUserId := ctx.Params("firebase_user_id")
+func DeleteUser(ctx *fiber.Ctx) error {
+	firebaseid := ctx.Get("x-firebase-uid")
+	if firebaseid == "" {
+		return fiber.NewError(fiber.StatusUnauthorized, "header.x-firebase-uid is empty")
+	}
+
 	var user models.User
-	var feel models.UserFeel
 
-	if err := ctx.BodyParser(&feel); err != nil {
+	if err := user.Delete(firebaseid); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	if err := user.GetOne(firebaseUserId); err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, err.Error())
-	}
-
-	if err := user.AddUserFeel(feel); err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, err.Error())
-	}
-
-	return ctx.Status(fiber.StatusOK).JSON(user)
+	return ctx.SendStatus(fiber.StatusOK)
 }

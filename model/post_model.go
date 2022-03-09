@@ -11,7 +11,7 @@ import (
 )
 
 type Post struct {
-	BaseModel `bson:"basemodel"`
+	BaseModel `bson:",inline"`
 
 	ID             primitive.ObjectID `json:"id,omitempty" bson:"id"`
 	Title          string             `json:"title,omitempty" bson:"title"`

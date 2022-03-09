@@ -77,7 +77,16 @@ func createJWTToken(user *models.User) (string, int64, error) {
 	return t, exp, nil
 }
 
-// CREATE USER: POST: user/new
+// Create New User
+// @Summary      Create a new user
+// @Description  Create a new user
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param        todo  body      types.User  true  "New Todo"
+// @Success      200   {object}  types.User
+// @Failure      400   {object}  HTTPError
+// @Router       /user [post]
 func SignUp(c *fiber.Ctx) error {
 	var user models.User
 	userCol := firebase.FirebaseApp.Db.Collection("users")

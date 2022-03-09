@@ -7,12 +7,6 @@ import (
 	"cloud.google.com/go/firestore"
 )
 
-/*type chatCollection struct {
-	chatCollectionRef *firestore.CollectionRef
-}
-
-var chatCol = chatCollection{ chatCollectionRef: firebase.FirebaseApp.Db.Collection("chats") }*/
-
 func findChatID(chatIDst, chatIDnd string, chatCol *firestore.CollectionRef) (string, error) {
 	query := chatCol.Where("id", "==", chatIDst)
 	chat, err := query.Documents(firebase.Ctx).Next()

@@ -9,4 +9,7 @@ import (
 func SetUpUserRoutes(app *fiber.App) {
 	app.Get("/user", handler.SignIn)
 	app.Post("/user", handler.SignUp)
+	app.Get("/home", func(c *fiber.Ctx) error {
+		return c.SendString("helllo")
+	})
 }

@@ -35,6 +35,7 @@ func main() {
 	routes.PostRouter(app)
 	routes.ChatRoutes(app)
 	routes.SwaggerRoutes(app)
+	routes.UserFeelRouter(app)
 
 	go chat.HubConn.Run()
 	firebase.ConnectFirebase()

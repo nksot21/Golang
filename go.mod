@@ -5,9 +5,11 @@ go 1.17
 require (
 	cloud.google.com/go/firestore v1.6.1
 	firebase.google.com/go v3.13.0+incompatible
+	github.com/arsmn/fiber-swagger/v2 v2.24.0
 	github.com/gofiber/fiber/v2 v2.28.0
 	github.com/gofiber/websocket/v2 v2.0.17
 	github.com/joho/godotenv v1.4.0
+	github.com/swaggo/swag v1.8.0
 	go.mongodb.org/mongo-driver v1.8.3
 	google.golang.org/api v0.70.0
 )
@@ -21,7 +23,6 @@ require (
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
-	github.com/arsmn/fiber-swagger/v2 v2.24.0 // indirect
 	github.com/fasthttp/websocket v1.5.0 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
@@ -39,7 +40,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/savsgio/gotils v0.0.0-20211223103454-d0aaa54c5899 // indirect
 	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2 // indirect
-	github.com/swaggo/swag v1.8.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.33.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
@@ -61,5 +61,4 @@ require (
 	google.golang.org/grpc v1.44.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 )

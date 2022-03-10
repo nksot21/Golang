@@ -6,6 +6,14 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// Create Post
+// @Summary Create Post
+// @Tags /post
+// @Accept json
+// @Produce json
+// @Param post body models.Post true "Post"
+// @Success 200 ""
+// @Router /post/create [post]
 func CreatePost(ctx *fiber.Ctx) error {
 	var post models.Post
 
@@ -20,6 +28,14 @@ func CreatePost(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusCreated).JSON(post)
 }
 
+// Get Post
+// @Summary Get a post
+// @Tags /post
+// @Accept json
+// @Produce json
+// @Param id path []byte true "PostID"
+// @Success 200 ""
+// @Router /post/{postid} [get]
 func GetPost(ctx *fiber.Ctx) error {
 	var post models.Post
 	post_id := ctx.Params("postid")
@@ -32,6 +48,13 @@ func GetPost(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusCreated).JSON(result)
 }
 
+// Get All Posts
+// @Summary Get All Posts
+// @Tags /post
+// @Accept json
+// @Produce json
+// @Success 200 ""
+// @Router /post [get]
 func GetPosts(ctx *fiber.Ctx) error {
 	var post models.Post
 
@@ -44,6 +67,14 @@ func GetPosts(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusCreated).JSON(results)
 }
 
+// Delete Post
+// @Summary Delete a post
+// @Tags /post
+// @Accept json
+// @Produce json
+// @Param id path []byte true "PostID"
+// @Success 200 ""
+// @Router /post/delete/{postid} [put]
 func DeletePost(ctx *fiber.Ctx) error {
 	/*var post models.Post
 	post_id := ctx.Params("postid")
@@ -77,6 +108,15 @@ func DeletePost(ctx *fiber.Ctx) error {
 	return ctx.SendStatus(200)
 }*/
 
+// Update Post
+// @Summary Update Post
+// @Tags /post
+// @Accept json
+// @Produce json
+// @Param id path []byte true "PostID"
+// @Param post body models.Post true "Post"
+// @Success 200 ""
+// @Router /post/update/{postid} [put]
 func UpdatePost(ctx *fiber.Ctx) error {
 	var post models.Post
 	post_id := ctx.Params("postid")

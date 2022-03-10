@@ -13,8 +13,17 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/joho/godotenv/autoload" // load .env file automatically
+
+	_ "mental-health-api/docs"
 )
 
+// @title Mental Health Api
+// @version 1.0
+// @description Swagger for Mental Health Api App
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @host localhost:8080
+// @BasePath /
 func main() {
 	instance := database.GetMongoInstance()
 	defer instance.Client.Disconnect(context.Background())
@@ -25,6 +34,7 @@ func main() {
 	routes.UserRouter(app)
 	routes.PostRouter(app)
 	routes.ChatRoutes(app)
+	routes.SwaggerRoutes(app)
 
 	go chat.HubConn.Run()
 	firebase.ConnectFirebase()

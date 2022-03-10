@@ -12,6 +12,15 @@ type Messages struct {
 	Message []models.Message
 }
 
+// Get All Messages
+// @Summary Get All Messages
+// @Tags /chat
+// @Accept json
+// @Produce json
+// @Param userid path string true "UserID"
+// @Param id path string true "ID"
+// @Success 200 ""
+// @Router /chat/getall/{userid}/{id} [get]
 func GetAllMessages(ctx *fiber.Ctx) error {
 	var messagesResponse Messages
 
@@ -40,4 +49,18 @@ func GetAllMessages(ctx *fiber.Ctx) error {
 		messagesResponse.Message = append(messagesResponse.Message, message)
 	}
 	return ctx.Status(fiber.StatusCreated).JSON(messagesResponse)
+}
+
+// Connect Chat
+// @Summary Update to websocket
+// @Tags /chat
+// @Accept json
+// @Produce json
+// @Param userid path string true "UserID"
+// @Param id path string true "ID"
+// @Success 200 ""
+// @Router /chat/{userid}/{id} [get]
+func ChatPage(c *fiber.Ctx) error {
+	//models.GetAllMessages(c.Params("userid"), c.Params("id"))
+	return c.SendFile("home.html")
 }

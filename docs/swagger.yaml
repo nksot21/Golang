@@ -1,0 +1,248 @@
+basePath: /
+definitions:
+  models.Post:
+    properties:
+      created_at:
+        type: integer
+      deleted:
+        type: boolean
+      deleted_at:
+        type: integer
+      detail:
+        type: string
+      emotion:
+        type: integer
+      firebase_user_id:
+        type: string
+      id:
+        type: string
+      picture:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: integer
+    type: object
+  models.User:
+    properties:
+      bio:
+        type: string
+      created_at:
+        type: integer
+      deleted:
+        type: boolean
+      deleted_at:
+        type: integer
+      email:
+        type: string
+      firebase_user_id:
+        type: string
+      is_expert:
+        type: boolean
+      name:
+        type: string
+      updated_at:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Swagger for Mental Health Api App
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Mental Health Api
+  version: "1.0"
+paths:
+  /chat/{userid}/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: UserID
+        in: path
+        name: userid
+        required: true
+        type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Update to websocket
+      tags:
+      - /chat
+  /chat/getall/{userid}/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: UserID
+        in: path
+        name: userid
+        required: true
+        type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Get All Messages
+      tags:
+      - /chat
+  /post:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Get All Posts
+      tags:
+      - /post
+  /post/{postid}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: PostID
+        in: path
+        items:
+          type: integer
+        name: id
+        required: true
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Get a post
+      tags:
+      - /post
+  /post/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Post
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/models.Post'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Create Post
+      tags:
+      - /post
+  /post/delete/{postid}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: PostID
+        in: path
+        items:
+          type: integer
+        name: id
+        required: true
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Delete a post
+      tags:
+      - /post
+  /post/update/{postid}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: PostID
+        in: path
+        items:
+          type: integer
+        name: id
+        required: true
+        type: array
+      - description: Post
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/models.Post'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Update Post
+      tags:
+      - /post
+  /user:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Get User
+      tags:
+      - /user
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Create User
+      tags:
+      - /user
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Update User
+      tags:
+      - /user
+swagger: "2.0"

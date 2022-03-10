@@ -6,6 +6,14 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// Create User's Feeling
+// @Summary Create User's Feel
+// @Tags /user-feel
+// @Accept json
+// @Produce json
+// @Param UserFeel body models.UserFeel true "User Feel"
+// @Success 200 ""
+// @Router /user-feel [post]
 func CreateUserFeel(ctx *fiber.Ctx) error {
 	firebaseid := ctx.Get("x-firebase-uid")
 	if firebaseid == "" {
@@ -33,6 +41,14 @@ func CreateUserFeel(ctx *fiber.Ctx) error {
 	})
 }
 
+// Get User's Feeling
+// @Summary Get User's Feel
+// @Tags /user-feel
+// @Accept json
+// @Produce json
+// @Param UserID header string true "UserID"
+// @Success 200 ""
+// @Router /user-feel [get]
 func GetUserFeel(ctx *fiber.Ctx) error {
 	firebaseid := ctx.Get("x-firebase-uid")
 

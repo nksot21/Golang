@@ -13,7 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200 ""
-// @Router /user [get]
+// @Router /user/get-info [get]
 func GetUser(ctx *fiber.Ctx) error {
 	firebaseid := ctx.Get("x-firebase-uid")
 	if firebaseid == "" {
@@ -86,6 +86,14 @@ func UpdateUser(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(user)
 }
 
+// Delete User
+// @Summary Delete User
+// @Tags /user
+// @Accept json
+// @Produce json
+// @Param userID header string true "UserID"
+// @Success 200 ""
+// @Router /user [delete]
 func DeleteUser(ctx *fiber.Ctx) error {
 	firebaseid := ctx.Get("x-firebase-uid")
 	if firebaseid == "" {

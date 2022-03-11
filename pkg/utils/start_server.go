@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -41,10 +42,11 @@ func StartServerWithGracefulShutdown(a *fiber.App) {
 // StartServer func for starting a simple server.
 func StartServer(a *fiber.App) {
 	// Build Fiber connection URL.
-	fiberConnURL, _ := ConnectionURLBuilder("fiber")
+	//fiberConnURL, _ := ConnectionURLBuilder("fiber")
 
 	// Run server.
-	if err := a.Listen(fiberConnURL); err != nil {
+	port := fmt.Sprintf(":%s", os.Getenv("PORT"))
+	if err := a.Listen(port); err != nil {
 		log.Printf("Oops... Server is not running! Reason: %v", err)
 	}
 }

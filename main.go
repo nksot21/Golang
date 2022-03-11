@@ -8,7 +8,8 @@ import (
 	"mental-health-api/pkg/database"
 	"mental-health-api/pkg/firebase"
 	"mental-health-api/pkg/routes"
-	"mental-health-api/pkg/utils"
+
+	//"mental-health-api/pkg/utils"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -44,9 +45,11 @@ func main() {
 	fmt.Println("Connected to MongoDB!")
 
 	// Start server (with or without graceful shutdown).
-	if os.Getenv("STAGE_STATUS") == "dev" {
+	/*if os.Getenv("STAGE_STATUS") == "dev" {
 		utils.StartServer(app)
 	} else {
 		utils.StartServerWithGracefulShutdown(app)
-	}
+	}*/
+	port := fmt.Sprintf(":%s", os.Getenv("PORT"))
+	app.Listen(port)
 }

@@ -1,1 +1,1 @@
-web: go build
+web: bin/Go-lang

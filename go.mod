@@ -1,3 +1,5 @@
+// +heroku goVersion go1.17
+
 module mental-health-api
 
 go 1.17

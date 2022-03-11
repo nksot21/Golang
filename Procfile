@@ -1,1 +1,0 @@
-web: go run D:\myedu\gopath\src\gdscAPI\mental-health-api

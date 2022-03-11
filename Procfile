@@ -1,1 +1,1 @@
-web: bin/go-getting-started
+web: bin/mental-health-api

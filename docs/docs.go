@@ -111,7 +111,7 @@ const docTemplate = `{
         },
         "/post/create": {
             "post": {
-                "description": "EVENT EMOTION = 0\nPOST  HAPPY = 1\nPOST  SAD = 2\nPOST  SCARED = 3\nPOST  ANGRY = 4\nPOST  WORRY = 5\nPOST  NORMAL = 6\nPOST  DEPRESSION = 7",
+                "description": "EVENT_emotion = 0\nPOST__happy = 1\nPOST__sad = 2\nPOST__scared = 3\nPOST__angry = 4\nPOST__worry = 5\nPOST__normal = 6\nPOST__depression = 7",
                 "consumes": [
                     "application/json"
                 ],

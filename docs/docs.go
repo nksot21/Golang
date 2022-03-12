@@ -328,6 +328,7 @@ const docTemplate = `{
         },
         "/user-feel": {
             "get": {
+                "description": "EVENT_emotion = 0\nPOST__happy = 1\nPOST__sad = 2\nPOST__scared = 3\nPOST__angry = 4\nPOST__worry = 5\nPOST__normal = 6\nPOST__depression = 7",
                 "consumes": [
                     "application/json"
                 ],
@@ -354,6 +355,7 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "description": "EVENT_emotion = 0\nPOST__happy = 1\nPOST__sad = 2\nPOST__scared = 3\nPOST__angry = 4\nPOST__worry = 5\nPOST__normal = 6\nPOST__depression = 7",
                 "consumes": [
                     "application/json"
                 ],

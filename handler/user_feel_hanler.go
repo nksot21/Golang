@@ -8,6 +8,14 @@ import (
 
 // Create User's Feeling
 // @Summary Create User's Feel
+// @Description EVENT_emotion = 0
+// @Description POST__happy = 1
+// @Description POST__sad = 2
+// @Description POST__scared = 3
+// @Description POST__angry = 4
+// @Description POST__worry = 5
+// @Description POST__normal = 6
+// @Description POST__depression = 7
 // @Tags /user-feel
 // @Accept json
 // @Produce json
@@ -43,6 +51,14 @@ func CreateUserFeel(ctx *fiber.Ctx) error {
 
 // Get User's Feeling
 // @Summary Get User's Feel
+// @Description EVENT_emotion = 0
+// @Description POST__happy = 1
+// @Description POST__sad = 2
+// @Description POST__scared = 3
+// @Description POST__angry = 4
+// @Description POST__worry = 5
+// @Description POST__normal = 6
+// @Description POST__depression = 7
 // @Tags /user-feel
 // @Accept json
 // @Produce json

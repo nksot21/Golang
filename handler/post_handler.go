@@ -8,6 +8,14 @@ import (
 
 // Create Post
 // @Summary Create Post
+// @Description EVENT EMOTION = 0
+// @Description POST  HAPPY = 1
+// @Description POST  SAD = 2
+// @Description POST  SCARED = 3
+// @Description POST  ANGRY = 4
+// @Description POST  WORRY = 5
+// @Description POST  NORMAL = 6
+// @Description POST  DEPRESSION = 7
 // @Tags /post
 // @Accept json
 // @Produce json

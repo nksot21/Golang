@@ -153,6 +153,15 @@ paths:
     post:
       consumes:
       - application/json
+      description: |-
+        EVENT EMOTION = 0
+        POST  HAPPY = 1
+        POST  SAD = 2
+        POST  SCARED = 3
+        POST  ANGRY = 4
+        POST  WORRY = 5
+        POST  NORMAL = 6
+        POST  DEPRESSION = 7
       parameters:
       - description: Post
         in: body

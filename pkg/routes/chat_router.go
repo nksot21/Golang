@@ -20,8 +20,12 @@ func ChatRoutes(app *fiber.App) {
 	})
 
 	router := app.Group("/chat")
+	router.Get("/", func(ctx *fiber.Ctx) error {
+		return ctx.SendString("chat data")
+	})
 	router.Get("/getall/:userid/:id", handler.GetAllMessages)
 	router.Get("/:userid/:id", handler.ChatPage)
+
 	runServeWs := chat.ServeWs()
 	app.Get("/ws/chat/:userid/:id", runServeWs)
 }

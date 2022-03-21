@@ -19,6 +19,7 @@ type Post struct {
 	Detail         string             `json:"detail,omitempty" bson:"detail"`
 	Picture        string             `json:"picture,omitempty" bson:"picture"`
 	FireBaseUserId string             `json:"firebase_user_id,omitempty" bson:"firebase_user_id"`
+	Expert         User               `json:"expert" bson:"expert"`
 }
 
 type JsonData struct {
@@ -40,9 +41,11 @@ func (p *Post) Create() error {
 		Title:          p.Title,
 		Emotion:        p.Emotion,
 		Detail:         p.Detail,
-		Picture:        p.Picture,
+		Picture:        "https://picsum.photos/200/300",
 		FireBaseUserId: p.FireBaseUserId,
 	}
+
+	p.FireBaseUserId = newPost.FireBaseUserId
 
 	instance := database.GetMongoInstance()
 	result, err := instance.Db.Collection("Posts").InsertOne(context.Background(), newPost)
@@ -62,7 +65,7 @@ func (p *Post) GetOne(post_id string) (Post, error) {
 	instance := database.GetMongoInstance()
 	err := instance.Db.Collection("Posts").FindOne(context.Background(), bson.M{"id": objId}).Decode(&post)
 
-	fmt.Println(post.ID)
+	//fmt.Println(post.ID)
 	if err != nil {
 		return post, err
 	}
@@ -72,11 +75,14 @@ func (p *Post) GetOne(post_id string) (Post, error) {
 
 func (p *Post) GetAll() ([]Post, error) {
 	c, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	filter := bson.M{
+		"deleted": false,
+	}
 
 	instance := database.GetMongoInstance()
-	results, err := instance.Db.Collection("Posts").Find(c, bson.M{})
+	results, err := instance.Db.Collection("Posts").Find(c, filter)
 
-	fmt.Println(results)
+	//fmt.Println(results)
 
 	if err != nil {
 		return nil, err
@@ -90,6 +96,10 @@ func (p *Post) GetAll() ([]Post, error) {
 			return nil, err
 		}
 
+		var user User
+		user.GetOne(post.FireBaseUserId, "")
+		post.Expert = user
+
 		posts = append(posts, post)
 	}
 	fmt.Println(posts)
@@ -99,35 +109,30 @@ func (p *Post) GetAll() ([]Post, error) {
 
 func (p *Post) DeleteOne(post_id string) error {
 	/*objId, _ := primitive.ObjectIDFromHex(post_id)
-
 	instance := database.GetMongoInstance()
 	results, err := instance.Db.Collection("Posts").DeleteOne(context.Background(), bson.M{"id": objId})
-
 	fmt.Println(results)
-
 	if err != nil {
 		return err
 	}
-
 	return nil*/
 	collection := database.GetMongoInstance().Db.Collection("Posts")
 	objId, _ := primitive.ObjectIDFromHex(post_id)
-	post, err := p.GetOne(post_id)
-
+	/*post, err := p.GetOne(post_id)
 	if err != nil {
 		return err
 	}
-
 	newBaseModule := BaseModel{
 		CreatedAt: post.CreatedAt,
 		UpdatedAt: post.UpdatedAt,
 		Deleted:   true,
 		DeletedAt: time.Now().Unix(),
-	}
+	}*/
 
 	update := bson.M{
 		"$set": bson.M{
-			"basemodel": newBaseModule,
+			"deleted":    true,
+			"deleted_at": time.Now().Unix(),
 		},
 	}
 

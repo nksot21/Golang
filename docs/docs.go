@@ -417,6 +417,9 @@ const docTemplate = `{
                 "emotion": {
                     "type": "integer"
                 },
+                "expert": {
+                    "$ref": "#/definitions/models.User"
+                },
                 "firebase_user_id": {
                     "type": "string"
                 },

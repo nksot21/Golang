@@ -15,7 +15,7 @@ func ServeWs() func(*fiber.Ctx) error {
 		wg.Add(100)
 		log.Println(c.Locals("allowed"))
 		receiverID := c.Params("id")
-		client := &Client{hub: HubConn, conn: c, send: make(chan []byte, 256), userID: c.Params("userid")}
+		client := &Client{hub: HubConn, conn: c, send: make(chan Message, 256), userID: c.Params("userid")}
 		client.hub.register <- client
 
 		fmt.Println("New client")

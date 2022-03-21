@@ -2,9 +2,9 @@ package chat
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
-
 	models "mental-health-api/model"
 	"time"
 
@@ -29,7 +29,13 @@ type Message struct {
 	Content    []byte
 }
 
-// READ MESSAGES FROM WEBSOCKET CONNECTION TO HUB
+type MessageRes struct {
+	SenderID   string
+	ReceiverID string
+	Content    string
+}
+
+// READ MESSAGES FROM WEBSOCKET-CONNECTION TO HUB
 func (c *Client) readPump(conn websocket.Conn, receiverID string) {
 	defer func() {
 		c.hub.unregister <- c
@@ -81,13 +87,35 @@ func (c *Client) writePump(conn websocket.Conn, receiverID string) {
 			if err != nil {
 				return
 			}
-			w.Write(message)
+
+			//var network bytes.Buffer
+			//enc := gob.NewEncoder(&network)
+			//err = enc.Encode(message)
+
+			byteBuffer := new(bytes.Buffer)
+
+			messageSended := MessageRes{
+				SenderID:   message.SenderID,
+				ReceiverID: message.ReceiverID,
+				Content:    string(message.Content)}
+
+			text := json.NewEncoder(byteBuffer).Encode(messageSended)
+			if err != nil {
+				log.Fatal("encode error:", err)
+			}
+
+			//network.Bytes()
+			fmt.Println(text)
+
+			w.Write(byteBuffer.Bytes())
+			fmt.Println(message.Content)
 
 			// Add queued chat messages to the current websocket message.
 			n := len(c.send)
 			for i := 0; i < n; i++ {
 				w.Write(newline)
-				w.Write(<-c.send)
+				messageContent := <-c.send
+				w.Write(messageContent.Content)
 			}
 
 			if err := w.Close(); err != nil {

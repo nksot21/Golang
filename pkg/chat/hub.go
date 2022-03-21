@@ -24,9 +24,8 @@ func (h *Hub) Run() {
 		case messg := <-h.broadcast:
 			for client := range h.clients {
 				if client.userID == messg.ReceiverID || client.userID == messg.SenderID {
-					message := messg.Content
 					select {
-					case client.send <- message:
+					case client.send <- messg:
 					default:
 						close(client.send)
 						delete(h.clients, client)

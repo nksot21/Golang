@@ -5,6 +5,7 @@ import (
 	"mental-health-api/pkg/const/firestoreCol"
 	"mental-health-api/pkg/firebase"
 
+	"cloud.google.com/go/firestore"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -32,22 +33,27 @@ func GetAllMessages(ctx *fiber.Ctx) error {
 	}
 	chatCol := firebase.FirebaseApp.Db.Collection(firestoreCol.CHAT_COLLECTION)
 	chat := chatCol.Doc(chatID)
-	messagesRef := chat.Collection("messages").DocumentRefs(firebase.Ctx)
+	messagesRef := chat.Collection("messages").OrderBy("CreatedAt", firestore.Asc).Documents(firebase.Ctx)
+	//messagesRef := chat.Collection("messages").DocumentRefs(firebase.Ctx)
 	messages, err := messagesRef.GetAll()
 	if err != nil {
 		return err
 	}
 	for messgIndex := range messages {
-		messageSnap, err := messages[messgIndex].Get(firebase.Ctx)
+		//messageSnap, err := messages[messgIndex].Get(firebase.Ctx)
 		if err != nil {
 			return err
 		}
 		var message models.Message
-		if err = messageSnap.DataTo(&message); err != nil {
+		//if err = messageSnap.DataTo(&message); err != nil {
+		//	return err
+		//}
+		if err = messages[messgIndex].DataTo(&message); err != nil {
 			return err
 		}
 		messagesResponse.Message = append(messagesResponse.Message, message)
 	}
+
 	return ctx.Status(fiber.StatusCreated).JSON(messagesResponse)
 }
 

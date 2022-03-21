@@ -7,7 +7,7 @@ import (
 type Client struct {
 	hub    *Hub
 	conn   *websocket.Conn
-	send   chan []byte
+	send   chan Message
 	userID string
 }
 

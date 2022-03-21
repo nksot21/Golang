@@ -107,9 +107,7 @@ const docTemplate = `{
                         "description": ""
                     }
                 }
-            }
-        },
-        "/post/create": {
+            },
             "post": {
                 "description": "EVENT_emotion = 0\nPOST__happy = 1\nPOST__sad = 2\nPOST__scared = 3\nPOST__angry = 4\nPOST__worry = 5\nPOST__normal = 6\nPOST__depression = 7",
                 "consumes": [
@@ -140,8 +138,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/post/delete/{postid}": {
-            "put": {
+        "/post/{postid}": {
+            "get": {
                 "consumes": [
                     "application/json"
                 ],
@@ -151,7 +149,7 @@ const docTemplate = `{
                 "tags": [
                     "/post"
                 ],
-                "summary": "Delete a post",
+                "summary": "Get a post",
                 "parameters": [
                     {
                         "type": "array",
@@ -169,9 +167,7 @@ const docTemplate = `{
                         "description": ""
                     }
                 }
-            }
-        },
-        "/post/update/{postid}": {
+            },
             "put": {
                 "consumes": [
                     "application/json"
@@ -209,10 +205,8 @@ const docTemplate = `{
                         "description": ""
                     }
                 }
-            }
-        },
-        "/post/{postid}": {
-            "get": {
+            },
+            "delete": {
                 "consumes": [
                     "application/json"
                 ],
@@ -222,7 +216,7 @@ const docTemplate = `{
                 "tags": [
                     "/post"
                 ],
-                "summary": "Get a post",
+                "summary": "Delete a post",
                 "parameters": [
                     {
                         "type": "array",

@@ -10,7 +10,7 @@ func PostRouter(a *fiber.App) {
 	router := a.Group("/post")
 	router.Get("/", handler.GetPosts)
 	router.Get("/:postid?", handler.GetPost)
-	router.Post("/create", handler.CreatePost)
-	router.Put("/update/:postid?", handler.UpdatePost)
-	router.Put("/delete/:postid?", handler.DeletePost)
+	router.Post("/", handler.CreatePost)
+	router.Put("/:postid?", handler.UpdatePost)
+	router.Delete("/:postid?", handler.DeletePost)
 }

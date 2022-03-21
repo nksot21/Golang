@@ -21,7 +21,7 @@ import (
 // @Produce json
 // @Param post body models.Post true "Post"
 // @Success 200 ""
-// @Router /post/create [post]
+// @Router /post [post]
 func CreatePost(ctx *fiber.Ctx) error {
 	var post models.Post
 
@@ -33,7 +33,12 @@ func CreatePost(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 
 	}
-	return ctx.Status(fiber.StatusCreated).JSON(post)
+	//return ctx.Status(fiber.StatusCreated).JSON(post)
+	return ctx.JSON(models.Response{
+		Status:  fiber.StatusCreated,
+		Message: "Create Post successfully",
+		Data:    post,
+	})
 }
 
 // Get Post
@@ -53,7 +58,12 @@ func GetPost(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	return ctx.Status(fiber.StatusCreated).JSON(result)
+	//return ctx.Status(fiber.StatusCreated).JSON(result)
+	return ctx.JSON(models.Response{
+		Status:  fiber.StatusCreated,
+		Message: "Get Post successfully",
+		Data:    result,
+	})
 }
 
 // Get All Posts
@@ -72,7 +82,12 @@ func GetPosts(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	return ctx.Status(fiber.StatusCreated).JSON(results)
+	//return ctx.Status(fiber.StatusCreated).JSON(results)
+	return ctx.JSON(models.Response{
+		Status:  fiber.StatusCreated,
+		Message: "Get Posts successfully",
+		Data:    results,
+	})
 }
 
 // Delete Post
@@ -82,18 +97,8 @@ func GetPosts(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param id path []byte true "PostID"
 // @Success 200 ""
-// @Router /post/delete/{postid} [put]
+// @Router /post/{postid} [delete]
 func DeletePost(ctx *fiber.Ctx) error {
-	/*var post models.Post
-	post_id := ctx.Params("postid")
-
-	err := post.DeleteOne(post_id)
-
-	if err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, err.Error())
-	}
-
-	return ctx.SendStatus(200)*/
 	var post models.Post
 	post_id := ctx.Params("postid")
 
@@ -101,20 +106,19 @@ func DeletePost(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	return ctx.SendStatus(200)
-}
-
-/*func DeletePosts(ctx *fiber.Ctx) error {
-	var post models.Post
-
-	err := post.DeleteAll()
+	results, err := post.GetAll()
 
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	return ctx.SendStatus(200)
-}*/
+	//return ctx.SendStatus(200)
+	return ctx.JSON(models.Response{
+		Status:  fiber.StatusCreated,
+		Message: "Delete Post successfully",
+		Data:    results,
+	})
+}
 
 // Update Post
 // @Summary Update Post
@@ -124,7 +128,7 @@ func DeletePost(ctx *fiber.Ctx) error {
 // @Param id path []byte true "PostID"
 // @Param post body models.Post true "Post"
 // @Success 200 ""
-// @Router /post/update/{postid} [put]
+// @Router /post/{postid} [put]
 func UpdatePost(ctx *fiber.Ctx) error {
 	var post models.Post
 	post_id := ctx.Params("postid")
@@ -139,5 +143,15 @@ func UpdatePost(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
-	return ctx.SendStatus(200)
+	result, err := post.GetOne(post_id)
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	//return ctx.SendStatus(200)
+	return ctx.JSON(models.Response{
+		Status:  fiber.StatusCreated,
+		Message: "Get Post successfully",
+		Data:    result,
+	})
 }

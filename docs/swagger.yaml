@@ -129,27 +129,6 @@ paths:
       summary: Get All Posts
       tags:
       - /post
-  /post/{postid}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: PostID
-        in: path
-        items:
-          type: integer
-        name: id
-        required: true
-        type: array
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: ""
-      summary: Get a post
-      tags:
-      - /post
-  /post/create:
     post:
       consumes:
       - application/json
@@ -177,8 +156,8 @@ paths:
       summary: Create Post
       tags:
       - /post
-  /post/delete/{postid}:
-    put:
+  /post/{postid}:
+    delete:
       consumes:
       - application/json
       parameters:
@@ -197,7 +176,25 @@ paths:
       summary: Delete a post
       tags:
       - /post
-  /post/update/{postid}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: PostID
+        in: path
+        items:
+          type: integer
+        name: id
+        required: true
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Get a post
+      tags:
+      - /post
     put:
       consumes:
       - application/json

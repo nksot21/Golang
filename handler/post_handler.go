@@ -20,7 +20,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param post body models.Post true "Post"
-// @Success 200 ""
+// @Success 200 {object} models.Response
 // @Router /post [post]
 func CreatePost(ctx *fiber.Ctx) error {
 	var post models.Post
@@ -47,7 +47,7 @@ func CreatePost(ctx *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param id path []byte true "PostID"
-// @Success 200 ""
+// @Success 200 {object} models.Response
 // @Router /post/{postid} [get]
 func GetPost(ctx *fiber.Ctx) error {
 	var post models.Post
@@ -71,7 +71,7 @@ func GetPost(ctx *fiber.Ctx) error {
 // @Tags /post
 // @Accept json
 // @Produce json
-// @Success 200 ""
+// @Success 200 {object} models.Response
 // @Router /post [get]
 func GetPosts(ctx *fiber.Ctx) error {
 	var post models.Post
@@ -96,7 +96,7 @@ func GetPosts(ctx *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param id path []byte true "PostID"
-// @Success 200 ""
+// @Success 200 {object} models.Response
 // @Router /post/{postid} [delete]
 func DeletePost(ctx *fiber.Ctx) error {
 	var post models.Post
@@ -127,7 +127,7 @@ func DeletePost(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param id path []byte true "PostID"
 // @Param post body models.Post true "Post"
-// @Success 200 ""
+// @Success 200 {object} models.Response
 // @Router /post/{postid} [put]
 func UpdatePost(ctx *fiber.Ctx) error {
 	var post models.Post

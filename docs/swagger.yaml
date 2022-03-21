@@ -25,6 +25,16 @@ definitions:
       updated_at:
         type: integer
     type: object
+  models.Response:
+    properties:
+      data: {}
+      error:
+        type: boolean
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
   models.User:
     properties:
       bio:
@@ -127,7 +137,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
       summary: Get All Posts
       tags:
       - /post
@@ -154,7 +166,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
       summary: Create Post
       tags:
       - /post
@@ -174,7 +188,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
       summary: Delete a post
       tags:
       - /post
@@ -193,7 +209,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
       summary: Get a post
       tags:
       - /post
@@ -218,7 +236,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
       summary: Update Post
       tags:
       - /post

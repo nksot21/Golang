@@ -14,15 +14,15 @@ func ServeWs() func(*fiber.Ctx) error {
 		var wg sync.WaitGroup
 		wg.Add(100)
 		log.Println(c.Locals("allowed"))
-		receiverID := c.Params("id")
+		//receiverID := c.Params("id")
 		client := &Client{hub: HubConn, conn: c, send: make(chan Message, 256), userID: c.Params("userid")}
 		client.hub.register <- client
 
 		fmt.Println("New client")
 		var conn = *c
 
-		go client.readPump(conn, receiverID)
-		go client.writePump(conn, receiverID)
+		go client.readPump(conn)
+		go client.writePump(conn)
 		wg.Wait()
 	},
 		websocket.Config{

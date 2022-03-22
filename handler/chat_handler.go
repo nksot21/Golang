@@ -65,7 +65,7 @@ func GetAllMessages(ctx *fiber.Ctx) error {
 // @Param userid path string true "UserID"
 // @Param id path string true "ID"
 // @Success 200 ""
-// @Router /chat/{userid}/{id} [get]
+// @Router /chat/{userid} [get]
 func ChatPage(c *fiber.Ctx) error {
 	//models.GetAllMessages(c.Params("userid"), c.Params("id"))
 	return c.SendFile("home.html")

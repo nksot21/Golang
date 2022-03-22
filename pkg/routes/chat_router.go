@@ -11,7 +11,7 @@ import (
 
 func ChatRoutes(app *fiber.App) {
 	// MIDDLEWARE
-	app.Use("/ws/chat/:userid/:id", func(c *fiber.Ctx) error {
+	app.Use("/ws/chat/:userid", func(c *fiber.Ctx) error {
 		if websocket.IsWebSocketUpgrade(c) {
 			c.Locals("allowed", true)
 			return c.Next()
@@ -21,8 +21,8 @@ func ChatRoutes(app *fiber.App) {
 
 	router := app.Group("/chat")
 	router.Get("/getall/:userid/:id", handler.GetAllMessages)
-	router.Get("/:userid/:id", handler.ChatPage)
+	router.Get("/:userid", handler.ChatPage)
 
 	runServeWs := chat.ServeWs()
-	app.Get("/ws/chat/:userid/:id", runServeWs)
+	app.Get("/ws/chat/:userid", runServeWs)
 }

@@ -55,7 +55,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/chat/{userid}/{id}": {
+        "/chat/{userid}": {
             "get": {
                 "consumes": [
                     "application/json"

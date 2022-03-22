@@ -83,7 +83,7 @@ info:
   title: Mental Health Api
   version: "1.0"
 paths:
-  /chat/{userid}/{id}:
+  /chat/{userid}:
     get:
       consumes:
       - application/json

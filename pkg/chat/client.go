@@ -23,6 +23,11 @@ var (
 	space   = []byte{' '}
 )
 
+type ReceivedMessage struct {
+	ReceiverID string
+	Content    string
+}
+
 type Message struct {
 	SenderID   string
 	ReceiverID string
@@ -36,7 +41,7 @@ type MessageRes struct {
 }
 
 // READ MESSAGES FROM WEBSOCKET-CONNECTION TO HUB
-func (c *Client) readPump(conn websocket.Conn, receiverID string) {
+func (c *Client) readPump(conn websocket.Conn) {
 	defer func() {
 		c.hub.unregister <- c
 		c.conn.Close()
@@ -49,15 +54,25 @@ func (c *Client) readPump(conn websocket.Conn, receiverID string) {
 
 	for {
 		_, message, err := c.conn.ReadMessage()
+		fmt.Println("received message: ", string(message))
+
+		var receivedMess ReceivedMessage
+		if err := json.Unmarshal(message, &receivedMess); err != nil {
+			//panic(err)
+		}
+		fmt.Println("receivedMessage content: ", receivedMess.Content)
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("error: %v", err)
 			}
 			break
 		}
-		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		messg := Message{SenderID: c.userID, ReceiverID: receiverID, Content: message}
-		id, _ := models.NewMessage(receiverID, c.userID, message)
+		receiverID := receivedMess.ReceiverID
+		messageContent := bytes.TrimSpace(bytes.Replace([]byte(receivedMess.Content), newline, space, -1))
+		messg := Message{SenderID: c.userID, ReceiverID: receiverID, Content: messageContent}
+
+		// CREATE A NEW MESSAGE IN DATABASE
+		id, _ := models.NewMessage(receiverID, c.userID, []byte(messageContent))
 
 		fmt.Println("MessageID: ", id)
 		c.hub.broadcast <- messg
@@ -65,7 +80,7 @@ func (c *Client) readPump(conn websocket.Conn, receiverID string) {
 }
 
 // PUMPS MESSAGES FROM HUB TO THE WEBSOCKER CONNECTION
-func (c *Client) writePump(conn websocket.Conn, receiverID string) {
+func (c *Client) writePump(conn websocket.Conn) {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
@@ -99,15 +114,14 @@ func (c *Client) writePump(conn websocket.Conn, receiverID string) {
 				ReceiverID: message.ReceiverID,
 				Content:    string(message.Content)}
 
-			text := json.NewEncoder(byteBuffer).Encode(messageSended)
+			err = json.NewEncoder(byteBuffer).Encode(messageSended)
 			if err != nil {
 				log.Fatal("encode error:", err)
 			}
 
-			//network.Bytes()
-			fmt.Println(text)
-
-			w.Write(byteBuffer.Bytes())
+			textByte := byteBuffer.Bytes()
+			textByte = bytes.Split(textByte, []byte("\n"))[0]
+			w.Write(textByte)
 			fmt.Println(message.Content)
 
 			// Add queued chat messages to the current websocket message.

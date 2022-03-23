@@ -35,7 +35,7 @@ func (uf *UserFeel) Create(firebaseUserId string) error {
 	return err
 }
 
-func (uf *UserFeel) GetFeels(firebaseUserId string) error {
+func (uf *UserFeel) GetFeels(firebaseUserId string) ([]UserFeel, error) {
 	uf.BaseModel.UpdatedAt = time.Now().Unix()
 	collection := database.GetMongoInstance().Db.Collection(collections.USER_FEEL_COLLECTION)
 
@@ -48,7 +48,20 @@ func (uf *UserFeel) GetFeels(firebaseUserId string) error {
 		"created_at": -1,
 	})
 
-	_, err := collection.Find(context.TODO(), filter, filterOption)
+	var results []UserFeel
+	cur, err := collection.Find(context.TODO(), filter, filterOption)
 
-	return err
+	for cur.Next(context.TODO()) {
+		//Create a value into which the single document can be decoded
+		var elem UserFeel
+		err := cur.Decode(&elem)
+		if err != nil {
+			return nil, err
+		}
+
+		results = append(results, elem)
+
+	}
+
+	return results, err
 }

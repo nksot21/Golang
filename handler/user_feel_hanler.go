@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	models "mental-health-api/model"
 
 	"github.com/gofiber/fiber/v2"
@@ -41,7 +42,9 @@ func GetUserFeel(ctx *fiber.Ctx) error {
 	}
 
 	var userFeel models.UserFeel
-	err := userFeel.GetFeels(firebaseid)
+	data, err := userFeel.GetFeels(firebaseid)
+
+	fmt.Println(data)
 
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
@@ -50,6 +53,6 @@ func GetUserFeel(ctx *fiber.Ctx) error {
 	return ctx.JSON(models.Response{
 		Status:  fiber.StatusCreated,
 		Message: "Get User info successfully",
-		Data:    userFeel,
+		Data:    &data,
 	})
 }

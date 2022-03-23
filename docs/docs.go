@@ -43,7 +43,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ChatSummary"
+                        }
                     }
                 }
             }
@@ -444,6 +447,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.ChatSummary": {
+            "type": "object",
+            "properties": {
+                "chatID": {
+                    "type": "string"
+                },
+                "friendID": {
+                    "type": "string"
+                },
+                "lastMessage": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Post": {
             "type": "object",
             "properties": {

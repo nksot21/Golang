@@ -78,7 +78,7 @@ func ChatPage(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param userid path string true "UserID"
-// @Success 200 ""
+// @Success 200 {object} models.ChatSummary
 // @Router /chat/conversations/{userid} [get]
 func GetChatIDs(c *fiber.Ctx) error {
 	var chatIDs []string

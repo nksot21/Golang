@@ -1,5 +1,14 @@
 basePath: /
 definitions:
+  models.ChatSummary:
+    properties:
+      chatID:
+        type: string
+      friendID:
+        type: string
+      lastMessage:
+        type: string
+    type: object
   models.Post:
     properties:
       created_at:
@@ -115,7 +124,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ChatSummary'
       summary: Get conversations' summary
       tags:
       - /chat

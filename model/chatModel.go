@@ -14,6 +14,16 @@ type Chat struct {
 	Users []string `firestore:"users"`
 }
 
+type ChatSummary struct {
+	ChatID      string
+	FriendID    string
+	LastMessage string
+}
+
+type Conversation struct {
+	users []string
+}
+
 func FindChatID(chatIDst, chatIDnd string, chatCol *firestore.CollectionRef) (string, error) {
 	fmt.Println("chatID ", chatIDst)
 	query := chatCol.Where("id", "==", chatIDst)
@@ -55,4 +65,68 @@ func GetChatID(userstID string, userndID string) (string, error) {
 		}
 	}
 	return chatID, nil
+}
+
+//GET CONVERSATIONS' INFO BY USERID
+func ConversationsInfo(chatsSnap []*firestore.DocumentSnapshot, userID string) ([]ChatSummary, error) {
+	var conversationsInfo []ChatSummary
+
+	for chatIndex := range chatsSnap {
+		chatSnap := chatsSnap[chatIndex]
+		conversationInfo, err := ConversationInfo(chatSnap, userID)
+		if err != nil {
+			return conversationsInfo, err
+		}
+		conversationsInfo = append(conversationsInfo, conversationInfo)
+	}
+
+	return conversationsInfo, nil
+}
+
+//GET CONVERSATION'S INFO BY USERID (receiverID => userinfo, last message)
+func ConversationInfo(chatSnap *firestore.DocumentSnapshot, userID string) (ChatSummary, error) {
+
+	var chatSummary ChatSummary
+	var converInfo Chat
+	var friendID string
+	err := chatSnap.DataTo(&converInfo)
+	if err != nil {
+		fmt.Println(err)
+		return chatSummary, err
+	}
+
+	//get receiverID
+	var friend User
+	usersID := converInfo.Users
+	if userID == usersID[0] {
+		friendID = usersID[1]
+	} else {
+		friendID = usersID[0]
+	}
+	if err = friend.GetOne(friendID, ""); err != nil {
+		fmt.Println("get user id: ", err)
+		//return chatSummary, err
+	}
+
+	//get last message
+	var lastMessage Message
+	chatRef := chatSnap.Ref
+	messageDocIter := chatRef.Collection(firestoreCol.MESSAGE_COLLECTION).OrderBy("CreatedAt", firestore.Asc).Limit(1).Documents(firebase.Ctx)
+	messageSnap, err := messageDocIter.Next()
+	if err != nil {
+		return chatSummary, err
+	}
+	err = messageSnap.DataTo(&lastMessage)
+	if err != nil {
+		return chatSummary, err
+	}
+
+	conversationInfo := ChatSummary{
+		ChatID:      converInfo.ID,
+		FriendID:    friendID,
+		LastMessage: lastMessage.Content,
+	}
+
+	fmt.Println("conversation-Info: ", conversationInfo)
+	return conversationInfo, nil
 }

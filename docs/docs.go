@@ -20,6 +20,34 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/chat/conversations/{userid}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "/chat"
+                ],
+                "summary": "Get conversations' summary",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "UserID",
+                        "name": "userid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/chat/getall/{userid}/{id}": {
             "get": {
                 "consumes": [
@@ -72,13 +100,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "UserID",
                         "name": "userid",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "ID",
-                        "name": "id",
                         "in": "path",
                         "required": true
                     }

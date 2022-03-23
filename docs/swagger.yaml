@@ -93,9 +93,22 @@ paths:
         name: userid
         required: true
         type: string
-      - description: ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Update to websocket
+      tags:
+      - /chat
+  /chat/conversations/{userid}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: UserID
         in: path
-        name: id
+        name: userid
         required: true
         type: string
       produces:
@@ -103,7 +116,7 @@ paths:
       responses:
         "200":
           description: ""
-      summary: Update to websocket
+      summary: Get conversations' summary
       tags:
       - /chat
   /chat/getall/{userid}/{id}:

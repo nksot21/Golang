@@ -21,6 +21,8 @@ func ChatRoutes(app *fiber.App) {
 
 	router := app.Group("/chat")
 	router.Get("/getall/:userid/:id", handler.GetAllMessages)
+	router.Get("/conversations/:userid", handler.GetChatIDs)
+
 	router.Get("/:userid", handler.ChatPage)
 
 	runServeWs := chat.ServeWs()

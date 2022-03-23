@@ -7,6 +7,8 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/gofiber/fiber/v2"
+
+	"fmt"
 )
 
 type Messages struct {
@@ -33,9 +35,9 @@ func GetAllMessages(ctx *fiber.Ctx) error {
 	}
 	chatCol := firebase.FirebaseApp.Db.Collection(firestoreCol.CHAT_COLLECTION)
 	chat := chatCol.Doc(chatID)
-	messagesRef := chat.Collection("messages").OrderBy("CreatedAt", firestore.Asc).Documents(firebase.Ctx)
+	messagesDocIter := chat.Collection(firestoreCol.MESSAGE_COLLECTION).OrderBy("CreatedAt", firestore.Asc).Documents(firebase.Ctx)
 	//messagesRef := chat.Collection("messages").DocumentRefs(firebase.Ctx)
-	messages, err := messagesRef.GetAll()
+	messages, err := messagesDocIter.GetAll()
 	if err != nil {
 		return err
 	}
@@ -63,10 +65,44 @@ func GetAllMessages(ctx *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param userid path string true "UserID"
-// @Param id path string true "ID"
 // @Success 200 ""
 // @Router /chat/{userid} [get]
 func ChatPage(c *fiber.Ctx) error {
 	//models.GetAllMessages(c.Params("userid"), c.Params("id"))
 	return c.SendFile("home.html")
+}
+
+// Get Conversations' summary
+// @Summary Get conversations' summary
+// @Tags /chat
+// @Accept json
+// @Produce json
+// @Param userid path string true "UserID"
+// @Success 200 ""
+// @Router /chat/conversations/{userid} [get]
+func GetChatIDs(c *fiber.Ctx) error {
+	var chatIDs []string
+	//var chats []ChatShortCut
+
+	userID := c.Params("userid")
+	chatCol := firebase.FirebaseApp.Db.Collection(firestoreCol.CHAT_COLLECTION)
+	chatDocumentIter := chatCol.Where("users", "array-contains", userID).Documents(firebase.Ctx)
+	chatsSnap, err := chatDocumentIter.GetAll()
+	if err != nil {
+		return err
+	}
+
+	conversationsInfo, err := models.ConversationsInfo(chatsSnap, userID)
+	if err != nil {
+		return err
+	}
+
+	for chatIndex := range chatsSnap {
+		ID := chatsSnap[chatIndex].Ref.ID
+		chatIDs = append(chatIDs, ID)
+	}
+
+	fmt.Println("text: ", conversationsInfo)
+	fmt.Println("chatIDs: ", chatIDs)
+	return c.Status(200).JSON(conversationsInfo)
 }

@@ -12,7 +12,7 @@ import (
 // @Tags /user
 // @Accept json
 // @Produce json
-// @Success 200 ""
+// @Success 200 {object} models.Response
 // @Router /user/get-info [get]
 func GetUser(ctx *fiber.Ctx) error {
 	firebaseid := ctx.Get("x-firebase-uid")
@@ -43,7 +43,7 @@ func GetUser(ctx *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param user body models.User true "User"
-// @Success 200 ""
+// @Success 200 {object} models.Response
 // @Router /user [post]
 func CreateUser(ctx *fiber.Ctx) error {
 	var user models.User
@@ -67,7 +67,7 @@ func CreateUser(ctx *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param user body models.User true "User"
-// @Success 200 ""
+// @Success 200 {object} models.User
 // @Router /user [put]
 func UpdateUser(ctx *fiber.Ctx) error {
 	firebaseid := ctx.Get("x-firebase-uid")

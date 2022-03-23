@@ -70,6 +70,10 @@ func (p *Post) GetOne(post_id string) (Post, error) {
 		return post, err
 	}
 
+	var user User
+	user.GetOne(post.FireBaseUserId, "")
+	post.Expert = user
+
 	return post, nil
 }
 

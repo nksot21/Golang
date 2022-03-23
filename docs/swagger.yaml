@@ -274,7 +274,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
       summary: Create User
       tags:
       - /user
@@ -292,7 +294,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
       summary: Update User
       tags:
       - /user
@@ -358,7 +362,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
       summary: Get User
       tags:
       - /user

@@ -40,7 +40,7 @@ func (u *User) GetOne(firebaseUserId string, email string) error {
 	return err
 }
 
-func (u *User) Create() error {
+func (u *User) Create(checkExist bool) error {
 	u.BaseModel = BaseModel{
 		CreatedAt: time.Now().Unix(),
 		UpdatedAt: time.Now().Unix(),
@@ -48,13 +48,15 @@ func (u *User) Create() error {
 	u.ID = primitive.NewObjectID()
 
 	collection := database.GetMongoInstance().Db.Collection(collections.USER_COLLECTION)
-	user := collection.FindOne(context.TODO(), bson.M{
-		"fire_base_user_id": u.FireBaseUserId,
-		"deleted":           false,
-	})
 
-	if user.Err() == nil {
-		return errors.New("User already exists")
+	if checkExist == true {
+		user := collection.FindOne(context.TODO(), bson.M{
+			"fire_base_user_id": u.FireBaseUserId,
+			"deleted":           false,
+		})
+		if user.Err() == nil {
+			return errors.New("User already exists")
+		}
 	}
 
 	_, err := collection.InsertOne(context.Background(), u)

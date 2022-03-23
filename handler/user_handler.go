@@ -7,6 +7,28 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+func Login(ctx *fiber.Ctx) error {
+	firebaseid := ctx.Get("x-firebase-uid")
+	if firebaseid == "" {
+		return fiber.NewError(fiber.StatusUnauthorized, "header.x-firebase-uid is empty")
+	}
+	var user models.User
+
+	if err := ctx.BodyParser(&user); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	if err := user.Create(false); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	return ctx.JSON(models.Response{
+		Status:  fiber.StatusCreated,
+		Message: "User login successfully",
+		Data:    user,
+	})
+}
+
 func GetUser(ctx *fiber.Ctx) error {
 	firebaseid := ctx.Get("x-firebase-uid")
 	if firebaseid == "" {
@@ -35,7 +57,7 @@ func CreateUser(ctx *fiber.Ctx) error {
 	if err := ctx.BodyParser(&user); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
-	if err := user.Create(); err != nil {
+	if err := user.Create(true); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 

@@ -453,8 +453,8 @@ const docTemplate = `{
                 "chatID": {
                     "type": "string"
                 },
-                "friendID": {
-                    "type": "string"
+                "friend": {
+                    "$ref": "#/definitions/models.User"
                 },
                 "lastMessage": {
                     "type": "string"

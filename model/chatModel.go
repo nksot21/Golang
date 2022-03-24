@@ -16,7 +16,7 @@ type Chat struct {
 
 type ChatSummary struct {
 	ChatID      string
-	FriendID    string
+	Friend      User
 	LastMessage string
 }
 
@@ -104,9 +104,10 @@ func ConversationInfo(chatSnap *firestore.DocumentSnapshot, userID string) (Chat
 		friendID = usersID[0]
 	}
 	if err = friend.GetOne(friendID, ""); err != nil {
-		fmt.Println("get user id: ", err)
+		fmt.Println("Get_user_id: ", err)
 		//return chatSummary, err
 	}
+	fmt.Println("friend-info: ", friend)
 
 	//get last message
 	var lastMessage Message
@@ -123,7 +124,7 @@ func ConversationInfo(chatSnap *firestore.DocumentSnapshot, userID string) (Chat
 
 	conversationInfo := ChatSummary{
 		ChatID:      converInfo.ID,
-		FriendID:    friendID,
+		Friend:      friend,
 		LastMessage: lastMessage.Content,
 	}
 

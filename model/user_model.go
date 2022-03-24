@@ -15,7 +15,7 @@ type User struct {
 	BaseModel `bson:",inline"`
 
 	ID             primitive.ObjectID `json:"-" bson:"_id, omitempty"`
-	FireBaseUserId string             `json:"firebase_user_id" bson:"fire_base_user_id, omitempty"`
+	FireBaseUserId string             `json:"firebase_user_id" bson:"firebase_user_id, omitempty"`
 	Name           string             `json:"name" bson:"name"`
 	Email          string             `json:"email" bson:"email"`
 	Bio            string             `json:"bio" bson:"bio"`

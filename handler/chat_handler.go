@@ -102,7 +102,6 @@ func GetChatIDs(c *fiber.Ctx) error {
 		chatIDs = append(chatIDs, ID)
 	}
 
-	fmt.Println("text: ", conversationsInfo)
 	fmt.Println("chatIDs: ", chatIDs)
 	return c.Status(200).JSON(conversationsInfo)
 }

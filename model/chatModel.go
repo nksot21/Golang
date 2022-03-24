@@ -107,12 +107,11 @@ func ConversationInfo(chatSnap *firestore.DocumentSnapshot, userID string) (Chat
 		fmt.Println("Get_user_id: ", err)
 		//return chatSummary, err
 	}
-	fmt.Println("friend-info: ", friend)
 
 	//get last message
 	var lastMessage Message
 	chatRef := chatSnap.Ref
-	messageDocIter := chatRef.Collection(firestoreCol.MESSAGE_COLLECTION).OrderBy("CreatedAt", firestore.Asc).Limit(1).Documents(firebase.Ctx)
+	messageDocIter := chatRef.Collection(firestoreCol.MESSAGE_COLLECTION).OrderBy("CreatedAt", firestore.Desc).Limit(1).Documents(firebase.Ctx)
 	messageSnap, err := messageDocIter.Next()
 	if err != nil {
 		return chatSummary, err
@@ -127,7 +126,5 @@ func ConversationInfo(chatSnap *firestore.DocumentSnapshot, userID string) (Chat
 		Friend:      friend,
 		LastMessage: lastMessage.Content,
 	}
-
-	fmt.Println("conversation-Info: ", conversationInfo)
 	return conversationInfo, nil
 }

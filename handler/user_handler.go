@@ -19,13 +19,21 @@ func Login(ctx *fiber.Ctx) error {
 	if firebaseid == "" {
 		return fiber.NewError(fiber.StatusUnauthorized, "header.x-firebase-uid is empty")
 	}
-	var user models.User
-
+	/*var user models.User
 	if err := ctx.BodyParser(&user); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
-
 	if err := user.Create(false); err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}*/
+
+	email := ctx.Query("email")
+	fmt.Println(firebaseid, email)
+
+	var user models.User
+	err := user.GetOne(firebaseid, email)
+
+	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
@@ -79,6 +87,17 @@ func CreateUser(ctx *fiber.Ctx) error {
 	if err := ctx.BodyParser(&user); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
+
+	var checkUser models.User
+
+	if err := checkUser.GetOne(user.FireBaseUserId, ""); err == nil {
+		return ctx.JSON(models.Response{
+			Status:  400,
+			Error:   true,
+			Message: "User already exists in the database",
+		})
+	}
+
 	if err := user.Create(true); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}

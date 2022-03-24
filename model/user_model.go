@@ -19,6 +19,7 @@ type User struct {
 	Name           string             `json:"name" bson:"name"`
 	Email          string             `json:"email" bson:"email"`
 	Bio            string             `json:"bio" bson:"bio"`
+	Picture        string             `json:"picture" bson:"picture"`
 	IsExpert       bool               `json:"is_expert" bson:"is_expert"`
 }
 
@@ -75,6 +76,7 @@ func (u *User) Update(firebaseUserId string) error {
 		"$set": bson.M{
 			"name":       u.Name,
 			"bio":        u.Bio,
+			"picture":    u.Picture,
 			"is_expert":  u.IsExpert,
 			"updated_at": u.BaseModel.UpdatedAt,
 		},

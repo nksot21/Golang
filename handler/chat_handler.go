@@ -16,8 +16,9 @@ import (
 type messageResponse struct {
 	ID        string
 	CreatedAt time.Time
-	Sender    string `firestore:"sender"`
-	Content   string `firestore:"content"`
+	SenderID  string
+	Sender    models.User
+	Content   string
 }
 
 type MessagesResponse struct {
@@ -45,24 +46,27 @@ func GetAllMessages(ctx *fiber.Ctx) error {
 	chatCol := firebase.FirebaseApp.Db.Collection(firestoreCol.CHAT_COLLECTION)
 	chat := chatCol.Doc(chatID)
 	messagesDocIter := chat.Collection(firestoreCol.MESSAGE_COLLECTION).OrderBy("CreatedAt", firestore.Asc).Documents(firebase.Ctx)
-	//messagesRef := chat.Collection("messages").DocumentRefs(firebase.Ctx)
 	messages, err := messagesDocIter.GetAll()
 	if err != nil {
 		return err
 	}
 	for messgIndex := range messages {
-		//messageSnap, err := messages[messgIndex].Get(firebase.Ctx)
 		if err != nil {
 			return err
 		}
 		var message models.Message
-		//if err = messageSnap.DataTo(&message); err != nil {
-		//	return err
-		//}
 		if err = messages[messgIndex].DataTo(&message); err != nil {
 			return err
 		}
-		messageResponse := messageResponse{ID: messages[messgIndex].Ref.ID, CreatedAt: message.CreatedAt, Sender: message.Sender, Content: message.Content}
+
+		//get sender-info
+		var sender models.User
+		if err = sender.GetOne(message.Sender, ""); err != nil {
+			fmt.Println(message.Sender)
+			fmt.Println("Get_user_id: ", err)
+		}
+
+		messageResponse := messageResponse{ID: messages[messgIndex].Ref.ID, CreatedAt: message.CreatedAt, SenderID: message.Sender, Sender: sender, Content: message.Content}
 		messagesResponse.Message = append(messagesResponse.Message, messageResponse)
 	}
 

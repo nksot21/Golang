@@ -107,9 +107,12 @@ func (c *Client) writePump(conn websocket.Conn) {
 				return
 			}
 
-			//var network bytes.Buffer
-			//enc := gob.NewEncoder(&network)
-			//err = enc.Encode(message)
+			//get sender-info
+			var sender models.User
+			if err = sender.GetOne(message.SenderID, ""); err != nil {
+				fmt.Println(message.SenderID)
+				fmt.Println("Get_user_id: ", err)
+			}
 
 			byteBuffer := new(bytes.Buffer)
 

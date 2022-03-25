@@ -17,7 +17,7 @@ type Chat struct {
 type ChatSummary struct {
 	ChatID      string
 	Friend      User
-	LastMessage string
+	LastMessage Message
 }
 
 type Conversation struct {
@@ -124,7 +124,6 @@ func ConversationInfo(chatSnap *firestore.DocumentSnapshot, userID string) (Chat
 	conversationInfo := ChatSummary{
 		ChatID:      converInfo.ID,
 		Friend:      friend,
-		LastMessage: lastMessage.Content,
-	}
+		LastMessage: lastMessage}
 	return conversationInfo, nil
 }

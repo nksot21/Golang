@@ -38,8 +38,44 @@ type Message struct {
 type MessageRes struct {
 	ID         string
 	SenderID   string
+	Sender     string
 	ReceiverID string
+	Receiver   string
 	Content    string
+}
+
+// CREATE MESSAGE: SEND TO CLIENT_WEBSOCKET
+func getUserInfo(senderID, receiverID string) (string, string, error) {
+	var sender models.User
+	var receiver models.User
+	// get users
+	if err := sender.GetOne(senderID, ""); err != nil {
+		fmt.Println("Get_user_id: ", err)
+		return "", "", err
+	}
+	if err := receiver.GetOne(receiverID, ""); err != nil {
+		fmt.Println("Get_user_id: ", err)
+		return "", "", err
+	}
+
+	// convert User to []byte
+	byteBuffer := new(bytes.Buffer)
+
+	err := json.NewEncoder(byteBuffer).Encode(sender)
+	if err != nil {
+		log.Fatal("encode error:", err)
+	}
+	senderStr := string(byteBuffer.Bytes())
+	fmt.Println("senderStr: ", senderStr)
+
+	err = json.NewEncoder(byteBuffer).Encode(receiver)
+	if err != nil {
+		log.Fatal("encode error:", err)
+	}
+	receiverStr := string(byteBuffer.Bytes())
+	fmt.Println("receiverStr: ", receiverStr)
+
+	return senderStr, receiverStr, nil
 }
 
 // READ MESSAGES FROM WEBSOCKET-CONNECTION TO HUB
@@ -69,6 +105,7 @@ func (c *Client) readPump(conn websocket.Conn) {
 			}
 			break
 		}
+
 		receiverID := receivedMess.ReceiverID
 
 		messageContent := bytes.TrimSpace(bytes.Replace([]byte(receivedMess.Content), newline, space, -1))
@@ -107,11 +144,9 @@ func (c *Client) writePump(conn websocket.Conn) {
 				return
 			}
 
-			//get sender-info
-			var sender models.User
-			if err = sender.GetOne(message.SenderID, ""); err != nil {
-				fmt.Println(message.SenderID)
-				fmt.Println("Get_user_id: ", err)
+			sender, receiver, err := getUserInfo(message.SenderID, message.ReceiverID)
+			if err != nil {
+				return
 			}
 
 			byteBuffer := new(bytes.Buffer)
@@ -119,7 +154,9 @@ func (c *Client) writePump(conn websocket.Conn) {
 			messageSended := MessageRes{
 				ID:         message.ID,
 				SenderID:   message.SenderID,
+				Sender:     sender,
 				ReceiverID: message.ReceiverID,
+				Receiver:   receiver,
 				Content:    string(message.Content)}
 
 			err = json.NewEncoder(byteBuffer).Encode(messageSended)

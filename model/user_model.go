@@ -60,6 +60,10 @@ func (u *User) Create(checkExist bool) error {
 		}
 	}
 
+	if u.Picture == "" {
+		u.Picture = "https://images.pexels.com/photos/9456631/pexels-photo-9456631.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+	}
+
 	_, err := collection.InsertOne(context.Background(), u)
 	return err
 }

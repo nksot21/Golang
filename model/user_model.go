@@ -26,13 +26,13 @@ type User struct {
 func (u *User) GetOne(firebaseUserId string, email string) error {
 	collection := database.GetMongoInstance().Db.Collection(collections.USER_COLLECTION)
 	filter := bson.M{
-		"fire_base_user_id": firebaseUserId,
-		"email":             email,
-		"deleted":           false,
+		"firebase_user_id": firebaseUserId,
+		"email":            email,
+		"deleted":          false,
 	}
 
 	if email != "" {
-		delete(filter, "fire_base_user_id")
+		delete(filter, "firebase_user_id")
 	} else {
 		delete(filter, "email")
 	}
@@ -52,12 +52,16 @@ func (u *User) Create(checkExist bool) error {
 
 	if checkExist == true {
 		user := collection.FindOne(context.TODO(), bson.M{
-			"fire_base_user_id": u.FireBaseUserId,
-			"deleted":           false,
+			"firebase_user_id": u.FireBaseUserId,
+			"deleted":          false,
 		})
 		if user.Err() == nil {
 			return errors.New("User already exists")
 		}
+	}
+
+	if u.Picture == "" {
+		u.Picture = "https://images.pexels.com/photos/9456631/pexels-photo-9456631.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
 	}
 
 	_, err := collection.InsertOne(context.Background(), u)
@@ -68,8 +72,8 @@ func (u *User) Update(firebaseUserId string) error {
 	u.BaseModel.UpdatedAt = time.Now().Unix()
 	collection := database.GetMongoInstance().Db.Collection(collections.USER_COLLECTION)
 	filter := bson.M{
-		"fire_base_user_id": firebaseUserId,
-		"deleted":           false,
+		"firebase_user_id": firebaseUserId,
+		"deleted":          false,
 	}
 
 	update := bson.M{
@@ -89,8 +93,8 @@ func (u *User) Update(firebaseUserId string) error {
 func (u *User) Delete(firebaseUserId string) error {
 	collection := database.GetMongoInstance().Db.Collection(collections.USER_COLLECTION)
 	filter := bson.M{
-		"fire_base_user_id": firebaseUserId,
-		"deleted":           false,
+		"firebase_user_id": firebaseUserId,
+		"deleted":          false,
 	}
 
 	update := bson.M{

@@ -156,3 +156,18 @@ func DeleteUser(ctx *fiber.Ctx) error {
 
 	return ctx.SendStatus(fiber.StatusOK)
 }
+
+func GetUsers(ctx *fiber.Ctx) error {
+	var user models.User
+	results, err := user.GetAll()
+
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	return ctx.JSON(models.Response{
+		Status:  fiber.StatusCreated,
+		Message: "Get User info successfully",
+		Data:    results,
+	})
+}

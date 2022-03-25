@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"errors"
+	"fmt"
 	"mental-health-api/pkg/const/collections"
 	"mental-health-api/pkg/database"
 	"time"
@@ -106,4 +107,33 @@ func (u *User) Delete(firebaseUserId string) error {
 	result := collection.FindOneAndUpdate(context.Background(), filter, update)
 
 	return result.Err()
+}
+
+func (u *User) GetAll() ([]User, error) {
+	c, _ := context.WithTimeout(context.Background(), 10*time.Second)
+
+	collection := database.GetMongoInstance().Db.Collection(collections.USER_COLLECTION)
+	filter := bson.M{
+		"deleted": false,
+	}
+
+	results, err := collection.Find(context.TODO(), filter)
+
+	if err != nil {
+		return nil, err
+	}
+	defer results.Close(c)
+
+	var users []User
+	for results.Next(c) {
+		var user User
+		if err := results.Decode(&user); err != nil {
+			return nil, err
+		}
+
+		users = append(users, user)
+	}
+	fmt.Println(users)
+
+	return users, nil
 }

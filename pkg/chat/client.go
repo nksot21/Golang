@@ -29,12 +29,14 @@ type ReceivedMessage struct {
 }
 
 type Message struct {
+	ID         string
 	SenderID   string
 	ReceiverID string
 	Content    []byte
 }
 
 type MessageRes struct {
+	ID         string
 	SenderID   string
 	ReceiverID string
 	Content    string
@@ -68,11 +70,13 @@ func (c *Client) readPump(conn websocket.Conn) {
 			break
 		}
 		receiverID := receivedMess.ReceiverID
+
 		messageContent := bytes.TrimSpace(bytes.Replace([]byte(receivedMess.Content), newline, space, -1))
-		messg := Message{SenderID: c.userID, ReceiverID: receiverID, Content: messageContent}
 
 		// CREATE A NEW MESSAGE IN DATABASE
 		id, _ := models.NewMessage(receiverID, c.userID, []byte(messageContent))
+
+		messg := Message{ID: id, SenderID: c.userID, ReceiverID: receiverID, Content: messageContent}
 
 		fmt.Println("MessageID: ", id)
 		c.hub.broadcast <- messg
@@ -110,6 +114,7 @@ func (c *Client) writePump(conn websocket.Conn) {
 			byteBuffer := new(bytes.Buffer)
 
 			messageSended := MessageRes{
+				ID:         message.ID,
 				SenderID:   message.SenderID,
 				ReceiverID: message.ReceiverID,
 				Content:    string(message.Content)}

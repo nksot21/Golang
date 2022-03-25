@@ -14,7 +14,6 @@ type Message struct {
 
 func NewMessage(receiverID, senderID string, content []byte) (string, error) {
 	contentStr := string(content)
-	newMessg := Message{CreatedAt: time.Now(), Sender: senderID, Content: contentStr}
 	chatCol := firebase.FirebaseApp.Db.Collection(firestoreCol.CHAT_COLLECTION)
 	chatid, err := GetChatID(senderID, receiverID)
 	if err != nil {
@@ -22,10 +21,11 @@ func NewMessage(receiverID, senderID string, content []byte) (string, error) {
 	}
 	chat := chatCol.Doc(chatid)
 	messgCol := chat.Collection("messages")
-	newMessage := messgCol.NewDoc()
-	_, err = newMessage.Create(firebase.Ctx, newMessg)
+	messageRef := messgCol.NewDoc()
+	newMessage := Message{CreatedAt: time.Now(), Sender: senderID, Content: contentStr}
+	_, err = messageRef.Create(firebase.Ctx, newMessage)
 	if err != nil {
 		return "", err
 	}
-	return newMessage.ID, nil
+	return messageRef.ID, nil
 }

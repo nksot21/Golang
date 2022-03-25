@@ -5,14 +5,23 @@ import (
 	"mental-health-api/pkg/const/firestoreCol"
 	"mental-health-api/pkg/firebase"
 
+	"time"
+
 	"cloud.google.com/go/firestore"
 	"github.com/gofiber/fiber/v2"
 
 	"fmt"
 )
 
-type Messages struct {
-	Message []models.Message
+type messageResponse struct {
+	ID        string
+	CreatedAt time.Time
+	Sender    string `firestore:"sender"`
+	Content   string `firestore:"content"`
+}
+
+type MessagesResponse struct {
+	Message []messageResponse
 }
 
 // Get All Messages
@@ -25,7 +34,7 @@ type Messages struct {
 // @Success 200 ""
 // @Router /chat/getall/{userid}/{id} [get]
 func GetAllMessages(ctx *fiber.Ctx) error {
-	var messagesResponse Messages
+	var messagesResponse MessagesResponse
 
 	senderID := ctx.Params("userid")
 	receiverID := ctx.Params("id")
@@ -53,7 +62,8 @@ func GetAllMessages(ctx *fiber.Ctx) error {
 		if err = messages[messgIndex].DataTo(&message); err != nil {
 			return err
 		}
-		messagesResponse.Message = append(messagesResponse.Message, message)
+		messageResponse := messageResponse{ID: messages[messgIndex].Ref.ID, CreatedAt: message.CreatedAt, Sender: message.Sender, Content: message.Content}
+		messagesResponse.Message = append(messagesResponse.Message, messageResponse)
 	}
 
 	return ctx.Status(fiber.StatusCreated).JSON(messagesResponse)

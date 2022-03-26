@@ -65,7 +65,7 @@ func (p *Post) GetOne(post_id string) (Post, error) {
 	instance := database.GetMongoInstance()
 	err := instance.Db.Collection("Posts").FindOne(context.Background(), bson.M{"id": objId}).Decode(&post)
 
-	//fmt.Println(post.ID)
+	fmt.Println(post.ID)
 	if err != nil {
 		return post, err
 	}
@@ -106,7 +106,7 @@ func (p *Post) GetAll() ([]Post, error) {
 
 		posts = append(posts, post)
 	}
-	fmt.Println(posts)
+	//fmt.Println(posts)
 
 	return posts, nil
 }

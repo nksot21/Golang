@@ -2,6 +2,7 @@ package handler
 
 import (
 	models "mental-health-api/model"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -87,6 +88,67 @@ func GetPosts(ctx *fiber.Ctx) error {
 		Status:  fiber.StatusCreated,
 		Message: "Get Posts successfully",
 		Data:    results,
+	})
+}
+
+func Get5Posts(ctx *fiber.Ctx) error {
+	var post models.Post
+	emotion := ctx.Get("emotion")
+	emotionInt, _ := strconv.Atoi(emotion)
+
+	results, err := post.GetAll()
+
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	var posts []models.Post
+	var lengthResult = len(results)
+
+	i := 1
+	check := true
+
+	if emotion == "" {
+		for check {
+			var p models.Post
+			p.ID = results[lengthResult-i].ID
+			p.Title = results[lengthResult-i].Title
+			p.Emotion = results[lengthResult-i].Emotion
+			p.Detail = results[lengthResult-i].Detail
+			p.Picture = results[lengthResult-i].Picture
+			p.FireBaseUserId = results[lengthResult-i].FireBaseUserId
+
+			posts = append(posts, p)
+			i++
+			if i > lengthResult || len(posts) == 5 {
+				check = false
+			}
+		}
+	} else {
+		for check {
+			if emotionInt == results[lengthResult-i].Emotion {
+				var p models.Post
+				p.ID = results[lengthResult-i].ID
+				p.Title = results[lengthResult-i].Title
+				p.Emotion = results[lengthResult-i].Emotion
+				p.Detail = results[lengthResult-i].Detail
+				p.Picture = results[lengthResult-i].Picture
+				p.FireBaseUserId = results[lengthResult-i].FireBaseUserId
+
+				posts = append(posts, p)
+			}
+			i++
+			if i > lengthResult || len(posts) == 5 {
+				check = false
+			}
+		}
+	}
+
+	//return ctx.Status(fiber.StatusCreated).JSON(results)
+	return ctx.JSON(models.Response{
+		Status:  fiber.StatusCreated,
+		Message: "Get Posts successfully",
+		Data:    posts,
 	})
 }
 

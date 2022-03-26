@@ -38,9 +38,9 @@ type Message struct {
 type MessageRes struct {
 	ID         string
 	SenderID   string
-	Sender     string
+	Sender     UserRef
 	ReceiverID string
-	Receiver   string
+	Receiver   UserRef
 	Content    string
 }
 
@@ -51,13 +51,14 @@ type UserRef struct {
 }
 
 // CREATE MESSAGE: SEND TO CLIENT_WEBSOCKET
-func getUserInfo(senderID, receiverID string) (string, string, error) {
+func getUserInfo(senderID, receiverID string) (UserRef, UserRef, error) {
 	var sender models.User
 	var receiver models.User
+	var errUser UserRef
 	// get users
 	if err := sender.GetOne(senderID, ""); err != nil {
 		fmt.Println("Get_user_id: ", err)
-		return "", "", err
+		return errUser, errUser, err
 	}
 	senderRef := UserRef{
 		Name:    sender.Name,
@@ -67,7 +68,7 @@ func getUserInfo(senderID, receiverID string) (string, string, error) {
 	fmt.Println("sender: ", sender.Name)
 	if err := receiver.GetOne(receiverID, ""); err != nil {
 		fmt.Println("Get_user_id: ", err)
-		return "", "", err
+		return errUser, errUser, err
 	}
 	receiverRef := UserRef{
 		Name:    receiver.Name,
@@ -96,7 +97,7 @@ func getUserInfo(senderID, receiverID string) (string, string, error) {
 	receiverStr := string(senderByte)
 	fmt.Println("receiverStr: ", receiverStr)
 
-	return senderStr, receiverStr, nil
+	return senderRef, receiverRef, nil
 }
 
 // READ MESSAGES FROM WEBSOCKET-CONNECTION TO HUB

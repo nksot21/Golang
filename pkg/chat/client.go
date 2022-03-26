@@ -45,9 +45,10 @@ type MessageRes struct {
 }
 
 type UserRef struct {
-	Name    string
-	Email   string
-	Picture string
+	Name      string
+	Email     string
+	Picture   string
+	CreatedAt int64
 }
 
 // CREATE MESSAGE: SEND TO CLIENT_WEBSOCKET
@@ -61,9 +62,10 @@ func getUserInfo(senderID, receiverID string) (UserRef, UserRef, error) {
 		return errUser, errUser, err
 	}
 	senderRef := UserRef{
-		Name:    sender.Name,
-		Email:   sender.Email,
-		Picture: sender.Picture,
+		Name:      sender.Name,
+		Email:     sender.Email,
+		Picture:   sender.Picture,
+		CreatedAt: sender.CreatedAt,
 	}
 	fmt.Println("sender: ", sender.Name)
 	if err := receiver.GetOne(receiverID, ""); err != nil {
@@ -71,9 +73,10 @@ func getUserInfo(senderID, receiverID string) (UserRef, UserRef, error) {
 		return errUser, errUser, err
 	}
 	receiverRef := UserRef{
-		Name:    receiver.Name,
-		Email:   receiver.Email,
-		Picture: receiver.Picture,
+		Name:      receiver.Name,
+		Email:     receiver.Email,
+		Picture:   receiver.Picture,
+		CreatedAt: receiver.CreatedAt,
 	}
 
 	// convert User to []byte

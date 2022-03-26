@@ -94,7 +94,7 @@ func GetPosts(ctx *fiber.Ctx) error {
 
 func Get5Posts(ctx *fiber.Ctx) error {
 	var post models.Post
-	emotion := ctx.Query("emotion")
+	emotion := ctx.Params("emotion")
 	emotionInt, _ := strconv.Atoi(emotion)
 	fmt.Println(emotion)
 

@@ -165,6 +165,16 @@ func Get5Posts(ctx *fiber.Ctx) error {
 // @Success 200 {object} models.Response
 // @Router /post/{postid} [delete]
 func DeletePost(ctx *fiber.Ctx) error {
+	/*var post models.Post
+	post_id := ctx.Params("postid")
+
+	err := post.DeleteOne(post_id)
+
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	return ctx.SendStatus(200)*/
 	var post models.Post
 	post_id := ctx.Params("postid")
 

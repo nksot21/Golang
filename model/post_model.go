@@ -65,7 +65,7 @@ func (p *Post) GetOne(post_id string) (Post, error) {
 	instance := database.GetMongoInstance()
 	err := instance.Db.Collection("Posts").FindOne(context.Background(), bson.M{"id": objId}).Decode(&post)
 
-	fmt.Println(post.ID)
+	//fmt.Println(post.ID)
 	if err != nil {
 		return post, err
 	}
@@ -106,26 +106,32 @@ func (p *Post) GetAll() ([]Post, error) {
 
 		posts = append(posts, post)
 	}
-	//fmt.Println(posts)
+	fmt.Println(posts)
 
 	return posts, nil
 }
 
 func (p *Post) DeleteOne(post_id string) error {
 	/*objId, _ := primitive.ObjectIDFromHex(post_id)
+
 	instance := database.GetMongoInstance()
 	results, err := instance.Db.Collection("Posts").DeleteOne(context.Background(), bson.M{"id": objId})
+
 	fmt.Println(results)
+
 	if err != nil {
 		return err
 	}
+
 	return nil*/
 	collection := database.GetMongoInstance().Db.Collection("Posts")
 	objId, _ := primitive.ObjectIDFromHex(post_id)
 	/*post, err := p.GetOne(post_id)
+
 	if err != nil {
 		return err
 	}
+
 	newBaseModule := BaseModel{
 		CreatedAt: post.CreatedAt,
 		UpdatedAt: post.UpdatedAt,

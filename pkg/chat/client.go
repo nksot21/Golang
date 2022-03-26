@@ -44,6 +44,12 @@ type MessageRes struct {
 	Content    string
 }
 
+type UserRef struct {
+	Name    string
+	Email   string
+	Picture string
+}
+
 // CREATE MESSAGE: SEND TO CLIENT_WEBSOCKET
 func getUserInfo(senderID, receiverID string) (string, string, error) {
 	var sender models.User
@@ -53,26 +59,41 @@ func getUserInfo(senderID, receiverID string) (string, string, error) {
 		fmt.Println("Get_user_id: ", err)
 		return "", "", err
 	}
+	senderRef := UserRef{
+		Name:    sender.Name,
+		Email:   sender.Email,
+		Picture: sender.Picture,
+	}
+	fmt.Println("sender: ", sender.Name)
 	if err := receiver.GetOne(receiverID, ""); err != nil {
 		fmt.Println("Get_user_id: ", err)
 		return "", "", err
+	}
+	receiverRef := UserRef{
+		Name:    receiver.Name,
+		Email:   receiver.Email,
+		Picture: receiver.Picture,
 	}
 
 	// convert User to []byte
 	byteBuffer := new(bytes.Buffer)
 
-	err := json.NewEncoder(byteBuffer).Encode(sender)
+	err := json.NewEncoder(byteBuffer).Encode(senderRef)
 	if err != nil {
 		log.Fatal("encode error:", err)
 	}
-	senderStr := string(byteBuffer.Bytes())
+	senderByte := byteBuffer.Bytes()
+	senderByte = bytes.TrimSpace(bytes.Replace([]byte(senderByte), newline, space, -1))
+	senderStr := string(senderByte)
 	fmt.Println("senderStr: ", senderStr)
 
-	err = json.NewEncoder(byteBuffer).Encode(receiver)
+	err = json.NewEncoder(byteBuffer).Encode(receiverRef)
 	if err != nil {
 		log.Fatal("encode error:", err)
 	}
-	receiverStr := string(byteBuffer.Bytes())
+	receiverByte := byteBuffer.Bytes()
+	receiverByte = bytes.TrimSpace(bytes.Replace([]byte(receiverByte), newline, space, -1))
+	receiverStr := string(senderByte)
 	fmt.Println("receiverStr: ", receiverStr)
 
 	return senderStr, receiverStr, nil
@@ -92,13 +113,11 @@ func (c *Client) readPump(conn websocket.Conn) {
 
 	for {
 		_, message, err := c.conn.ReadMessage()
-		fmt.Println("received message: ", string(message))
 
 		var receivedMess ReceivedMessage
 		if err := json.Unmarshal(message, &receivedMess); err != nil {
 			//panic(err)
 		}
-		fmt.Println("receivedMessage content: ", receivedMess.Content)
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("error: %v", err)
@@ -167,7 +186,8 @@ func (c *Client) writePump(conn websocket.Conn) {
 			textByte := byteBuffer.Bytes()
 			textByte = bytes.Split(textByte, []byte("\n"))[0]
 			w.Write(textByte)
-			fmt.Println(message.Content)
+
+			fmt.Println("mesage: ", string(textByte))
 
 			// Add queued chat messages to the current websocket message.
 			n := len(c.send)

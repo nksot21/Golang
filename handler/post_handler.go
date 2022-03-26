@@ -110,7 +110,7 @@ func Get5Posts(ctx *fiber.Ctx) error {
 	i := 1
 	check := true
 
-	if emotion == "" {
+	if emotionInt == -1 {
 		for check {
 			var p models.Post
 			p.ID = results[lengthResult-i].ID
@@ -119,7 +119,7 @@ func Get5Posts(ctx *fiber.Ctx) error {
 			p.Detail = results[lengthResult-i].Detail
 			p.Picture = results[lengthResult-i].Picture
 			p.FireBaseUserId = results[lengthResult-i].FireBaseUserId
-			fmt.Println("no")
+			//fmt.Println("no")
 
 			posts = append(posts, p)
 			i++
@@ -137,7 +137,7 @@ func Get5Posts(ctx *fiber.Ctx) error {
 				p.Detail = results[lengthResult-i].Detail
 				p.Picture = results[lengthResult-i].Picture
 				p.FireBaseUserId = results[lengthResult-i].FireBaseUserId
-				fmt.Println("yes")
+				//fmt.Println("yes")
 
 				posts = append(posts, p)
 			}

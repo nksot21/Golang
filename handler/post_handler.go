@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	models "mental-health-api/model"
 	"strconv"
 
@@ -93,8 +94,9 @@ func GetPosts(ctx *fiber.Ctx) error {
 
 func Get5Posts(ctx *fiber.Ctx) error {
 	var post models.Post
-	emotion := ctx.Get("emotion")
+	emotion := ctx.Query("emotion")
 	emotionInt, _ := strconv.Atoi(emotion)
+	fmt.Println(emotion)
 
 	results, err := post.GetAll()
 
@@ -117,6 +119,7 @@ func Get5Posts(ctx *fiber.Ctx) error {
 			p.Detail = results[lengthResult-i].Detail
 			p.Picture = results[lengthResult-i].Picture
 			p.FireBaseUserId = results[lengthResult-i].FireBaseUserId
+			fmt.Println("no")
 
 			posts = append(posts, p)
 			i++
@@ -134,6 +137,7 @@ func Get5Posts(ctx *fiber.Ctx) error {
 				p.Detail = results[lengthResult-i].Detail
 				p.Picture = results[lengthResult-i].Picture
 				p.FireBaseUserId = results[lengthResult-i].FireBaseUserId
+				fmt.Println("yes")
 
 				posts = append(posts, p)
 			}

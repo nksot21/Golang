@@ -20,7 +20,7 @@ func NewMessage(receiverID, senderID string, content []byte) (string, error) {
 		return "", err
 	}
 	chat := chatCol.Doc(chatid)
-	messgCol := chat.Collection("messages")
+	messgCol := chat.Collection(firestoreCol.MESSAGE_COLLECTION)
 	messageRef := messgCol.NewDoc()
 	newMessage := Message{CreatedAt: time.Now(), Sender: senderID, Content: contentStr}
 	_, err = messageRef.Create(firebase.Ctx, newMessage)

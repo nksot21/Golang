@@ -77,7 +77,9 @@ func ConversationsInfo(chatsSnap []*firestore.DocumentSnapshot, userID string) (
 		if err != nil {
 			return conversationsInfo, err
 		}
-		conversationsInfo = append(conversationsInfo, conversationInfo)
+		if conversationInfo.ChatID != "" {
+			conversationsInfo = append(conversationsInfo, conversationInfo)
+		}
 	}
 
 	return conversationsInfo, nil
@@ -85,7 +87,6 @@ func ConversationsInfo(chatsSnap []*firestore.DocumentSnapshot, userID string) (
 
 //GET CONVERSATION'S INFO BY USERID (receiverID => userinfo, last message)
 func ConversationInfo(chatSnap *firestore.DocumentSnapshot, userID string) (ChatSummary, error) {
-
 	var chatSummary ChatSummary
 	var converInfo Chat
 	var friendID string
@@ -108,14 +109,18 @@ func ConversationInfo(chatSnap *firestore.DocumentSnapshot, userID string) (Chat
 		//return chatSummary, err
 	}
 
+	fmt.Println("userid: ", friendID)
+
 	//get last message
 	var lastMessage Message
 	chatRef := chatSnap.Ref
 	messageDocIter := chatRef.Collection(firestoreCol.MESSAGE_COLLECTION).OrderBy("CreatedAt", firestore.Desc).Limit(1).Documents(firebase.Ctx)
 	messageSnap, err := messageDocIter.Next()
 	if err != nil {
-		return chatSummary, err
+		fmt.Println("err 1:", err)
+		return chatSummary, nil
 	}
+
 	err = messageSnap.DataTo(&lastMessage)
 	if err != nil {
 		return chatSummary, err

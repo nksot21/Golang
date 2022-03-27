@@ -41,7 +41,7 @@ func (p *Post) Create() error {
 		Title:          p.Title,
 		Emotion:        p.Emotion,
 		Detail:         p.Detail,
-		Picture:        "https://picsum.photos/200/300",
+		Picture:        p.Picture,
 		FireBaseUserId: p.FireBaseUserId,
 	}
 

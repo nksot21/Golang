@@ -70,7 +70,7 @@ func GetChatID(userstID string, userndID string) (string, error) {
 
 func SortLastMessages(conversations []ChatSummary) []ChatSummary {
 	sort.Slice(conversations[:], func(i, j int) bool {
-		return conversations[i].LastMessage.CreatedAt.Unix() < conversations[j].LastMessage.CreatedAt.Unix()
+		return conversations[i].LastMessage.CreatedAt.Unix() > conversations[j].LastMessage.CreatedAt.Unix()
 	})
 	return conversations[:]
 }

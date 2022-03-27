@@ -5,6 +5,7 @@ import (
 	"mental-health-api/pkg/firebase"
 
 	"fmt"
+	"sort"
 
 	"cloud.google.com/go/firestore"
 )
@@ -17,7 +18,7 @@ type Chat struct {
 type ChatSummary struct {
 	ChatID      string
 	Friend      User
-	LastMessage string
+	LastMessage Message
 }
 
 type Conversation struct {
@@ -67,6 +68,13 @@ func GetChatID(userstID string, userndID string) (string, error) {
 	return chatID, nil
 }
 
+func SortLastMessages(conversations []ChatSummary) []ChatSummary {
+	sort.Slice(conversations[:], func(i, j int) bool {
+		return conversations[i].LastMessage.CreatedAt.Unix() < conversations[j].LastMessage.CreatedAt.Unix()
+	})
+	return conversations[:]
+}
+
 //GET CONVERSATIONS' INFO BY USERID
 func ConversationsInfo(chatsSnap []*firestore.DocumentSnapshot, userID string) ([]ChatSummary, error) {
 	var conversationsInfo []ChatSummary
@@ -81,6 +89,8 @@ func ConversationsInfo(chatsSnap []*firestore.DocumentSnapshot, userID string) (
 			conversationsInfo = append(conversationsInfo, conversationInfo)
 		}
 	}
+
+	conversationsInfo = SortLastMessages(conversationsInfo)
 
 	return conversationsInfo, nil
 }
@@ -106,7 +116,7 @@ func ConversationInfo(chatSnap *firestore.DocumentSnapshot, userID string) (Chat
 	}
 	if err = friend.GetOne(friendID, ""); err != nil {
 		fmt.Println("Get_user_id: ", err)
-		//return chatSummary, err
+		return chatSummary, err
 	}
 
 	if friend.Picture == "" {
@@ -131,6 +141,6 @@ func ConversationInfo(chatSnap *firestore.DocumentSnapshot, userID string) (Chat
 	conversationInfo := ChatSummary{
 		ChatID:      converInfo.ID,
 		Friend:      friend,
-		LastMessage: lastMessage.Content}
+		LastMessage: lastMessage}
 	return conversationInfo, nil
 }

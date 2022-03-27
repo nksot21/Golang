@@ -41,7 +41,7 @@ func (p *Post) Create() error {
 		Title:          p.Title,
 		Emotion:        p.Emotion,
 		Detail:         p.Detail,
-		Picture:        "https://picsum.photos/200/300",
+		Picture:        p.Picture,
 		FireBaseUserId: p.FireBaseUserId,
 	}
 
@@ -113,19 +113,25 @@ func (p *Post) GetAll() ([]Post, error) {
 
 func (p *Post) DeleteOne(post_id string) error {
 	/*objId, _ := primitive.ObjectIDFromHex(post_id)
+
 	instance := database.GetMongoInstance()
 	results, err := instance.Db.Collection("Posts").DeleteOne(context.Background(), bson.M{"id": objId})
+
 	fmt.Println(results)
+
 	if err != nil {
 		return err
 	}
+
 	return nil*/
 	collection := database.GetMongoInstance().Db.Collection("Posts")
 	objId, _ := primitive.ObjectIDFromHex(post_id)
 	/*post, err := p.GetOne(post_id)
+
 	if err != nil {
 		return err
 	}
+
 	newBaseModule := BaseModel{
 		CreatedAt: post.CreatedAt,
 		UpdatedAt: post.UpdatedAt,

@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"fmt"
 	models "mental-health-api/model"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -90,6 +92,70 @@ func GetPosts(ctx *fiber.Ctx) error {
 	})
 }
 
+func Get5Posts(ctx *fiber.Ctx) error {
+	var post models.Post
+	emotion := ctx.Params("emotion")
+	emotionInt, _ := strconv.Atoi(emotion)
+	fmt.Println(emotion)
+
+	results, err := post.GetAll()
+
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	var posts []models.Post
+	var lengthResult = len(results)
+
+	i := 1
+	check := true
+
+	if emotionInt == -1 {
+		for check {
+			var p models.Post
+			p.ID = results[lengthResult-i].ID
+			p.Title = results[lengthResult-i].Title
+			p.Emotion = results[lengthResult-i].Emotion
+			p.Detail = results[lengthResult-i].Detail
+			p.Picture = results[lengthResult-i].Picture
+			p.FireBaseUserId = results[lengthResult-i].FireBaseUserId
+			//fmt.Println("no")
+
+			posts = append(posts, p)
+			i++
+			if i > lengthResult || len(posts) == 5 {
+				check = false
+			}
+		}
+	} else {
+		for check {
+			if emotionInt == results[lengthResult-i].Emotion {
+				var p models.Post
+				p.ID = results[lengthResult-i].ID
+				p.Title = results[lengthResult-i].Title
+				p.Emotion = results[lengthResult-i].Emotion
+				p.Detail = results[lengthResult-i].Detail
+				p.Picture = results[lengthResult-i].Picture
+				p.FireBaseUserId = results[lengthResult-i].FireBaseUserId
+				//fmt.Println("yes")
+
+				posts = append(posts, p)
+			}
+			i++
+			if i > lengthResult || len(posts) == 5 {
+				check = false
+			}
+		}
+	}
+
+	//return ctx.Status(fiber.StatusCreated).JSON(results)
+	return ctx.JSON(models.Response{
+		Status:  fiber.StatusCreated,
+		Message: "Get Posts successfully",
+		Data:    posts,
+	})
+}
+
 // Delete Post
 // @Summary Delete a post
 // @Tags /post
@@ -99,6 +165,16 @@ func GetPosts(ctx *fiber.Ctx) error {
 // @Success 200 {object} models.Response
 // @Router /post/{postid} [delete]
 func DeletePost(ctx *fiber.Ctx) error {
+	/*var post models.Post
+	post_id := ctx.Params("postid")
+
+	err := post.DeleteOne(post_id)
+
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+
+	return ctx.SendStatus(200)*/
 	var post models.Post
 	post_id := ctx.Params("postid")
 

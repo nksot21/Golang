@@ -109,7 +109,9 @@ func ConversationInfo(chatSnap *firestore.DocumentSnapshot, userID string) (Chat
 		//return chatSummary, err
 	}
 
-	fmt.Println("userid: ", friendID)
+	if friend.Picture == "" {
+		friend.Picture = firestoreCol.DEFAULT_PICTURE
+	}
 
 	//get last message
 	var lastMessage Message

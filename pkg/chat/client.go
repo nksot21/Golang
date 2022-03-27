@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	models "mental-health-api/model"
+	"mental-health-api/pkg/const/firestoreCol"
 	"time"
 
 	"github.com/gofiber/websocket/v2"
@@ -61,17 +62,26 @@ func getUserInfo(senderID, receiverID string) (UserRef, UserRef, error) {
 		fmt.Println("Get_user_id: ", err)
 		return errUser, errUser, err
 	}
+
+	if sender.Picture == "" {
+		sender.Picture = firestoreCol.DEFAULT_PICTURE
+	}
+
 	senderRef := UserRef{
 		Name:      sender.Name,
 		Email:     sender.Email,
 		Picture:   sender.Picture,
 		CreatedAt: sender.CreatedAt,
 	}
-	fmt.Println("sender: ", sender.Name)
 	if err := receiver.GetOne(receiverID, ""); err != nil {
 		fmt.Println("Get_user_id: ", err)
 		return errUser, errUser, err
 	}
+
+	if receiver.Picture == "" {
+		receiver.Picture = firestoreCol.DEFAULT_PICTURE
+	}
+
 	receiverRef := UserRef{
 		Name:      receiver.Name,
 		Email:     receiver.Email,

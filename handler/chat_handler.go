@@ -62,8 +62,11 @@ func GetAllMessages(ctx *fiber.Ctx) error {
 		//get sender-info
 		var sender models.User
 		if err = sender.GetOne(message.Sender, ""); err != nil {
-			fmt.Println(message.Sender)
 			fmt.Println("Get_user_id: ", err)
+		}
+
+		if sender.Picture == "" {
+			sender.Picture = firestoreCol.DEFAULT_PICTURE
 		}
 
 		messageResponse := messageResponse{ID: messages[messgIndex].Ref.ID, CreatedAt: message.CreatedAt, SenderID: message.Sender, Sender: sender, Content: message.Content}
@@ -96,7 +99,6 @@ func ChatPage(c *fiber.Ctx) error {
 // @Router /chat/conversations/{userid} [get]
 func GetChatIDs(c *fiber.Ctx) error {
 	var chatIDs []string
-	//var chats []ChatShortCut
 
 	userID := c.Params("userid")
 	chatCol := firebase.FirebaseApp.Db.Collection(firestoreCol.CHAT_COLLECTION)

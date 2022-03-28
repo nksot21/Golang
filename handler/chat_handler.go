@@ -122,6 +122,15 @@ func GetChatIDs(c *fiber.Ctx) error {
 	return c.Status(200).JSON(conversationsInfo)
 }
 
+// Change current showEmotion status
+// @Summary Change current showEmotion status
+// @Tags /chat
+// @Accept json
+// @Produce json
+// @Param userid path string true "UserID"
+// @Param id path string true "ID"
+// @Success 200 ""
+// @Router /chat/emotion/{userid}/{id} [put]
 func ShowEmotion(ctx *fiber.Ctx) error {
 	senderID := ctx.Params("userid")
 	receiverID := ctx.Params("id")

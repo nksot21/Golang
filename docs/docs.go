@@ -51,6 +51,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/chat/emotion/{userid}/{id}": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "/chat"
+                ],
+                "summary": "Change current showEmotion status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "UserID",
+                        "name": "userid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/chat/getall/{userid}/{id}": {
             "get": {
                 "consumes": [
@@ -479,6 +514,23 @@ const docTemplate = `{
                     "$ref": "#/definitions/models.User"
                 },
                 "lastMessage": {
+                    "$ref": "#/definitions/models.Message"
+                },
+                "showEmotion": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.Message": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "sender": {
                     "type": "string"
                 }
             }

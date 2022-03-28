@@ -7,6 +7,17 @@ definitions:
       friend:
         $ref: '#/definitions/models.User'
       lastMessage:
+        $ref: '#/definitions/models.Message'
+      showEmotion:
+        type: boolean
+    type: object
+  models.Message:
+    properties:
+      content:
+        type: string
+      createdAt:
+        type: string
+      sender:
         type: string
     type: object
   models.Post:
@@ -130,6 +141,29 @@ paths:
           schema:
             $ref: '#/definitions/models.ChatSummary'
       summary: Get conversations' summary
+      tags:
+      - /chat
+  /chat/emotion/{userid}/{id}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: UserID
+        in: path
+        name: userid
+        required: true
+        type: string
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Change current showEmotion status
       tags:
       - /chat
   /chat/getall/{userid}/{id}:

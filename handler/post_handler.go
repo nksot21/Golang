@@ -119,6 +119,7 @@ func Get5Posts(ctx *fiber.Ctx) error {
 			p.Detail = results[lengthResult-i].Detail
 			p.Picture = results[lengthResult-i].Picture
 			p.FireBaseUserId = results[lengthResult-i].FireBaseUserId
+			p.Expert = results[lengthResult-i].Expert
 			//fmt.Println("no")
 
 			posts = append(posts, p)
@@ -137,6 +138,7 @@ func Get5Posts(ctx *fiber.Ctx) error {
 				p.Detail = results[lengthResult-i].Detail
 				p.Picture = results[lengthResult-i].Picture
 				p.FireBaseUserId = results[lengthResult-i].FireBaseUserId
+				p.Expert = results[lengthResult-i].Expert
 				//fmt.Println("yes")
 
 				posts = append(posts, p)

@@ -20,6 +20,7 @@ type ChatSummary struct {
 	ChatID      string
 	Friend      User
 	LastMessage Message
+	ShowEmotion bool
 }
 
 type Conversation struct {
@@ -117,6 +118,7 @@ func ConversationInfo(chatSnap *firestore.DocumentSnapshot, userID string) (Chat
 		friendID = usersID[0]
 	}
 	if err = friend.GetOne(friendID, ""); err != nil {
+		fmt.Println("user id err: ", friendID)
 		fmt.Println("Get_user_id: ", err)
 		return chatSummary, err
 	}
@@ -142,6 +144,7 @@ func ConversationInfo(chatSnap *firestore.DocumentSnapshot, userID string) (Chat
 
 	conversationInfo := ChatSummary{
 		ChatID:      converInfo.ID,
+		ShowEmotion: converInfo.ShowEmotion,
 		Friend:      friend,
 		LastMessage: lastMessage}
 	return conversationInfo, nil

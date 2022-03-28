@@ -20,9 +20,11 @@ func Login(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusUnauthorized, "header.x-firebase-uid is empty")
 	}
 	/*var user models.User
+
 	if err := ctx.BodyParser(&user); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
+
 	if err := user.Create(false); err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}*/

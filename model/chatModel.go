@@ -11,8 +11,9 @@ import (
 )
 
 type Chat struct {
-	ID    string   `firestore:"id"`
-	Users []string `firestore:"users"`
+	ID          string   `firestore:"id"`
+	Users       []string `firestore:"users"`
+	ShowEmotion bool     `firestore:"showEmotion"`
 }
 
 type ChatSummary struct {
@@ -42,8 +43,9 @@ func FindChatID(chatIDst, chatIDnd string, chatCol *firestore.CollectionRef) (st
 func NewChat(userstID string, userndID string, chatID string, chatCol *firestore.CollectionRef) (string, error) {
 	usersID := append(make([]string, 0), userstID, userndID)
 	chat := Chat{
-		ID:    chatID,
-		Users: usersID,
+		ID:          chatID,
+		Users:       usersID,
+		ShowEmotion: false,
 	}
 
 	newChat := chatCol.Doc(chatID)

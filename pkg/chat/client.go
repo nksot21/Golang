@@ -98,8 +98,6 @@ func getUserInfo(senderID, receiverID string) (UserRef, UserRef, error) {
 	}
 	senderByte := byteBuffer.Bytes()
 	senderByte = bytes.TrimSpace(bytes.Replace([]byte(senderByte), newline, space, -1))
-	senderStr := string(senderByte)
-	fmt.Println("senderStr: ", senderStr)
 
 	err = json.NewEncoder(byteBuffer).Encode(receiverRef)
 	if err != nil {
@@ -107,8 +105,6 @@ func getUserInfo(senderID, receiverID string) (UserRef, UserRef, error) {
 	}
 	receiverByte := byteBuffer.Bytes()
 	receiverByte = bytes.TrimSpace(bytes.Replace([]byte(receiverByte), newline, space, -1))
-	receiverStr := string(senderByte)
-	fmt.Println("receiverStr: ", receiverStr)
 
 	return senderRef, receiverRef, nil
 }

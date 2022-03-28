@@ -121,3 +121,33 @@ func GetChatIDs(c *fiber.Ctx) error {
 	fmt.Println("chatIDs: ", chatIDs)
 	return c.Status(200).JSON(conversationsInfo)
 }
+
+func ShowEmotion(ctx *fiber.Ctx) error {
+	senderID := ctx.Params("userid")
+	receiverID := ctx.Params("id")
+	chatID, err := models.GetChatID(senderID, receiverID)
+	if err != nil {
+		return err
+	}
+
+	chatCol := firebase.FirebaseApp.Db.Collection(firestoreCol.CHAT_COLLECTION)
+	chat := chatCol.Doc(chatID)
+	chatSnap, err := chat.Get(firebase.Ctx)
+	if err != nil {
+		return err
+	}
+	var chatInfo models.Chat
+	err = chatSnap.DataTo(&chatInfo)
+	if err != nil {
+		return err
+	}
+
+	showEmotionStatus := chatInfo.ShowEmotion
+
+	fmt.Println("show emotion status: ", showEmotionStatus)
+	chat.Update(firebase.Ctx, []firestore.Update{
+		{Path: firestoreCol.SHOW_EMOTION, Value: !showEmotionStatus},
+	})
+
+	return ctx.Status(200).JSON(!showEmotionStatus)
+}

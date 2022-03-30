@@ -161,17 +161,21 @@ func ShowEmotion(ctx *fiber.Ctx) error {
 	return ctx.Status(200).JSON(!showEmotionStatus)
 }
 
+// Send Message
+// @Summary Send Message
+// @Tags /chat
+// @Accept json
+// @Produce json
+// @Param userid path string true "UserID"
+// @Success 200 ""
+// @Router /chat/{userid} [post]
 func SendMessage(ctx *fiber.Ctx) error {
 	var receivedMessage models.ReceivedMessage
 	sender := ctx.Params("userid")
-	fmt.Println(sender)
 	if err := ctx.BodyParser(&receivedMessage); err != nil {
 		fmt.Println(err)
 		return ctx.Status(400).JSON(err)
 	}
-
-	fmt.Println(receivedMessage.ReceiverID)
-	fmt.Println(receivedMessage.Content)
 
 	//database
 	id, _ := models.NewMessage(receivedMessage.ReceiverID, sender, []byte(receivedMessage.Content))

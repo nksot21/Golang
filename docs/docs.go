@@ -147,6 +147,32 @@ const docTemplate = `{
                         "description": ""
                     }
                 }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "/chat"
+                ],
+                "summary": "Send Message",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "UserID",
+                        "name": "userid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
             }
         },
         "/post": {
@@ -639,6 +665,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "firebase_user_id": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "reason": {

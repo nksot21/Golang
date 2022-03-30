@@ -12,6 +12,11 @@ type Message struct {
 	Content   string `firestore:"content"`
 }
 
+type ReceivedMessage struct {
+	ReceiverID string `json:"receiverID"`
+	Content    string `json:"content"`
+}
+
 func NewMessage(receiverID, senderID string, content []byte) (string, error) {
 	//authenticate reeceiverID, senderID
 	var receiver User

@@ -160,3 +160,26 @@ func ShowEmotion(ctx *fiber.Ctx) error {
 
 	return ctx.Status(200).JSON(!showEmotionStatus)
 }
+
+func SendMessage(ctx *fiber.Ctx) error {
+	var receivedMessage models.ReceivedMessage
+	sender := ctx.Params("userid")
+	fmt.Println(sender)
+	if err := ctx.BodyParser(&receivedMessage); err != nil {
+		fmt.Println(err)
+		return ctx.Status(400).JSON(err)
+	}
+
+	fmt.Println(receivedMessage.ReceiverID)
+	fmt.Println(receivedMessage.Content)
+
+	//database
+	id, _ := models.NewMessage(receivedMessage.ReceiverID, sender, []byte(receivedMessage.Content))
+
+	fmt.Println("MessageID: ", id)
+	return ctx.JSON(models.Response{
+		Status:  fiber.StatusCreated,
+		Message: "Create Post successfully",
+		Data:    receivedMessage,
+	})
+}

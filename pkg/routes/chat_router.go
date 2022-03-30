@@ -23,6 +23,7 @@ func ChatRoutes(app *fiber.App) {
 	router.Get("/getall/:userid/:id", handler.GetAllMessages)
 	router.Get("/conversations/:userid", handler.GetChatIDs)
 	router.Put("/emotion/:userid/:id", handler.ShowEmotion)
+	router.Post("/:userid", handler.SendMessage)
 
 	router.Get("/:userid", handler.ChatPage)
 

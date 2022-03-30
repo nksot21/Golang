@@ -140,7 +140,7 @@ func (c *Client) readPump(conn websocket.Conn) {
 		messageContent := bytes.TrimSpace(bytes.Replace([]byte(receivedMess.Content), newline, space, -1))
 
 		// CREATE A NEW MESSAGE IN DATABASE
-		id, _ := models.NewMessage(receiverID, c.userID, []byte(messageContent))
+		id, _, _ := models.NewMessage(receiverID, c.userID, []byte(messageContent))
 
 		messg := Message{ID: id, SenderID: c.userID, ReceiverID: receiverID, Content: messageContent}
 

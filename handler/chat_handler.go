@@ -21,6 +21,11 @@ type messageResponse struct {
 	Content   string
 }
 
+type messageResponseAPI struct {
+	ID         string
+	MessageRes models.Message
+}
+
 type MessagesResponse struct {
 	Message []messageResponse
 }
@@ -178,12 +183,15 @@ func SendMessage(ctx *fiber.Ctx) error {
 	}
 
 	//database
-	id, _ := models.NewMessage(receivedMessage.ReceiverID, sender, []byte(receivedMessage.Content))
+	id, message, _ := models.NewMessage(receivedMessage.ReceiverID, sender, []byte(receivedMessage.Content))
+
+	/*messageResponse = messageResponseAPI{
+	ID: id,
+	MessageRes: message}*/
 
 	fmt.Println("MessageID: ", id)
 	return ctx.JSON(models.Response{
 		Status:  fiber.StatusCreated,
 		Message: "Create Post successfully",
-		Data:    receivedMessage,
-	})
+		Data:    message})
 }

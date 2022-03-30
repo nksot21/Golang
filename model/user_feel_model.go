@@ -14,7 +14,7 @@ import (
 type UserFeel struct {
 	BaseModel `bson:",inline"`
 
-	ID             primitive.ObjectID `json:"-" bson:"_id"`
+	ID             primitive.ObjectID `json:"id" bson:"_id"`
 	FireBaseUserId string             `json:"firebase_user_id" bson:"firebase_user_id"`
 
 	FeelId int    `json:"feel_id" bson:"feel_id"`
@@ -30,8 +30,19 @@ func (uf *UserFeel) Create(firebaseUserId string) error {
 	uf.ID = primitive.NewObjectID()
 	uf.FireBaseUserId = firebaseUserId
 
+	newFeel := UserFeel{
+		BaseModel: BaseModel{
+			CreatedAt: time.Now().Unix(),
+			UpdatedAt: time.Now().Unix(),
+		},
+		ID:             primitive.NewObjectID(),
+		FeelId:         uf.FeelId,
+		Reason:         uf.Reason,
+		FireBaseUserId: firebaseUserId,
+	}
+
 	collection := database.GetMongoInstance().Db.Collection(collections.USER_FEEL_COLLECTION)
-	_, err := collection.InsertOne(context.TODO(), uf)
+	_, err := collection.InsertOne(context.TODO(), newFeel)
 	return err
 }
 
